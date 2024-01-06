@@ -1,13 +1,12 @@
 {
-  "extends": ["next", "plugin:prettier/recommended", "unused-imports"],
+  "extends": ["next", "plugin:prettier/recommended"],
   "plugins": ["react"],
   "rules": {
     "eqeqeq": "error",
     "no-console": "warn",
     "react/jsx-uses-vars": "error",
     "react/jsx-uses-react": "error",
-    "prettier/prettier": "error",
-    "unused-imports/no-unused-imports": "error"
+    "prettier/prettier": "error"
   }
 }
 //TODO: eslint-plugin-import, eslint-plugin-unused-importsの設定
