@@ -1,8 +1,35 @@
 import { Box, Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
-import puppeteer from 'puppeteer';
+import chrome from 'chrome-aws-lambda';
+import puppeteer, { Page } from 'puppeteer-core'
+
 
 export const ScoreMap: React.FC = async () => {
-  const browser = await puppeteer.launch();
+   const exePath =
+   process.platform === 'win32'
+     ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+     : process.platform === 'linux'
+     ? '/usr/bin/google-chrome'
+     : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+ 
+  const isProd = process.env.VERCEL;
+
+  const getOption = async () => {
+   return isProd
+     ? {
+         args: chrome.args,
+         executablePath: await chrome.executablePath,
+         headless: chrome.headless,
+       }
+     : {
+         args: [],
+         executablePath: exePath,
+         headless: true,
+       }
+  }
+ 
+
+  const option = await getOption();
+  const browser = await puppeteer.launch(option);
   const page = await browser.newPage();
   await page.goto('https://m-league.jp/stats/');
 
