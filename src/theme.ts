@@ -5,7 +5,7 @@ export const theme = extendTheme({
     global: {
       body: {
         bgColor: 'white',
-        bgImage: 'url(/images/bg_m.bmp)',
+        bgImage: 'url(/images/bg_m.jpg)',
         bgRepeat: 'repeat',
         bgSize: '100%',
         color: 'brack',
