@@ -1,3 +1,4 @@
+import { Header } from '@/components/Header';
 import { Provider } from '@/components/Providers';
 
 export const metadata = {
@@ -8,7 +9,12 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja_JP">
-      <Provider>{children}</Provider>
+      <body>
+        <Provider>
+          <Header />
+          {children}
+        </Provider>
+      </body>
     </html>
   );
 }
