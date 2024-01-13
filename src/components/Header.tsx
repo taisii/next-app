@@ -1,6 +1,6 @@
 'use client';
 
-import { HamburgerIcon, AddIcon, ExternalLinkIcon, RepeatIcon, EditIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, AddIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Portal } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
