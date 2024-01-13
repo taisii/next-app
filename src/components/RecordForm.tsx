@@ -13,7 +13,12 @@ export const RecordForm: React.FC = () => {
   const methods = useForm<RecordInput>({ resolver: zodResolver(recordFormSchema) });
   return (
     <FormProvider {...methods}>
-      <Box as="form" onSubmit={methods.handleSubmit(async (data) => await createRecord(data))}>
+      <Box
+        as="form"
+        onSubmit={methods.handleSubmit(async (data) => {
+          await createRecord(data);
+        })}
+      >
         <LabeledInput label="point" name="point" isRequired />
         <LabeledInput label="1着" name="top" isRequired />
         <LabeledInput label="2着" name="second" isRequired />

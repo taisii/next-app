@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
+
 import { prisma } from '@/infrastructures/prisma';
 
 export interface RecordInput {
@@ -20,4 +22,5 @@ export const createRecord = async ({ point, top, second, three, four }: RecordIn
       four,
     },
   });
+  revalidateTag('record');
 };

@@ -6,7 +6,9 @@ import { RecordList } from '@/components/RecordList';
 import { prisma } from '@/infrastructures/prisma';
 
 const RecordPage: NextPage = async () => {
-  const records = await prisma.record.findMany();
+  const records = await prisma.record.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
   let pointSum = 0;
   let averageRank = 0;
   let gemeCount = 0;
