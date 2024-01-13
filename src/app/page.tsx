@@ -1,7 +1,8 @@
+import { Card, CardBody, Text, VStack } from '@chakra-ui/react';
+
 import { MemberList } from '@/components/MemberList';
 import { SpreadSheet } from '@/components/SpreadSheet';
-import { prisma } from '@/infrastructures/prisma';
-import { Card, CardBody, Text, VStack } from '@chakra-ui/react';
+
 import type { NextPage } from 'next';
 
 const HomePage: NextPage = async () => {

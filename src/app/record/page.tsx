@@ -1,11 +1,14 @@
-import { RecordForm } from '@/components/RecordForm';
-import { RecordList } from '@/components/RecordList';
-import { prisma } from '@/infrastructures/prisma';
 import { Card, CardBody, Text, VStack } from '@chakra-ui/react';
 import { NextPage } from 'next';
 
+import { RecordForm } from '@/components/RecordForm';
+import { RecordList } from '@/components/RecordList';
+import { prisma } from '@/infrastructures/prisma';
+
 const RecordPage: NextPage = async () => {
-  const records = await prisma.record.findMany();
+  const records = await prisma.record.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
   let pointSum = 0;
   let averageRank = 0;
   let gemeCount = 0;
@@ -28,7 +31,11 @@ const RecordPage: NextPage = async () => {
         <Text>{averageRank / gemeCount}</Text>
         <Text fontSize="xl">獲得ポイント</Text>
         <Text>{pointSum}</Text>
-        <RecordForm />
+        <Card>
+          <CardBody>
+            <RecordForm />
+          </CardBody>
+        </Card>
       </VStack>
     </>
   );

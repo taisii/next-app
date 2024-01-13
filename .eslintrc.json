@@ -1,12 +1,50 @@
 {
   "extends": ["next", "plugin:prettier/recommended"],
-  "plugins": ["react"],
+  "plugins": ["react", "unused-imports", "import"],
   "rules": {
     "eqeqeq": "error",
     "no-console": "warn",
     "react/jsx-uses-vars": "error",
     "react/jsx-uses-react": "error",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "unused-imports/no-unused-imports-ts": "warn",
+        "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",  // 組み込みモジュール
+          "external", // npmでインストールした外部ライブラリ
+          "internal", // 自作モジュール
+          [
+            "parent",
+            "sibling"
+          ],
+          "object",
+          "type",
+          "index"
+        ],
+        "newlines-between": "always", // グループ毎にで改行を入れる
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ],
+        "alphabetize": {
+          "order": "asc", // 昇順にソート
+          "caseInsensitive": true // 小文字大文字を区別する 
+        },
+        "pathGroups": [ // 指定した順番にソートされる
+          {
+            "pattern": "@/components/common",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "@/components/hooks",
+            "group": "internal",
+            "position": "before"
+          }
+        ]
+      }
+    ]
   }
 }
 //TODO: eslint-plugin-import, eslint-plugin-unused-importsの設定
