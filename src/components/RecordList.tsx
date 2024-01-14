@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
+import { DeleteRecordButton } from './atoms/DeleteRecordButton';
+
 interface RecordProps {
   records: {
     id: number;
@@ -68,6 +70,9 @@ export const RecordRow: React.FC<Record> = (record) => {
       <Td>{record.second}</Td>
       <Td>{record.three}</Td>
       <Td>{record.four}</Td>
+      <Td>
+        <DeleteRecordButton id={record.id} />
+      </Td>
     </Tr>
   );
 };
