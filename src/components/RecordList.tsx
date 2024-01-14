@@ -2,6 +2,8 @@
 
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface RecordProps {
   records: {
@@ -16,6 +18,11 @@ interface RecordProps {
 }
 
 export const RecordList: React.FC<RecordProps> = ({ records }) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.refresh();
+  }, [router]);
   return (
     <>
       <TableContainer>
