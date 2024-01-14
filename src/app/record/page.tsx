@@ -5,6 +5,8 @@ import { RecordForm } from '@/components/RecordForm';
 import { RecordList } from '@/components/RecordList';
 import { prisma } from '@/infrastructures/prisma';
 
+export const dynamic = 'force-dynamic';
+
 const RecordPage: NextPage = async () => {
   const records = await prisma.record.findMany({
     orderBy: { createdAt: 'desc' },
