@@ -62,7 +62,7 @@ const RecordRow: React.FC<Record> = (record) => {
             <Center>{date}</Center>
           </Box>
           <Box width={10}>
-            <Center>{record.point}</Center>
+            {record.point > 0 ? <Center>{record.point}</Center> : <Center color="red">{record.point}</Center>}
           </Box>
           <AccordionButton display="contents">
             <AccordionIcon />

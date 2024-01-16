@@ -24,7 +24,9 @@ export const RecordForm: React.FC = () => {
         <LabeledInput label="2着" name="second" isRequired />
         <LabeledInput label="3着" name="three" isRequired />
         <LabeledInput label="4着" name="four" isRequired />
-        <Button type="submit">submit</Button>
+        <Button type="submit" mt={4}>
+          submit
+        </Button>
       </Box>
     </FormProvider>
   );
