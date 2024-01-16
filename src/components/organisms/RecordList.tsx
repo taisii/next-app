@@ -51,13 +51,16 @@ export type Record = {
   four: number;
 };
 
+//TODO: 中央揃えはもっといい方法がありそう
 const RecordRow: React.FC<Record> = (record) => {
   const date = dayjs(record.createdAt).format('YYYY/M/D');
   return (
     <Accordion key={record.id} allowToggle display="contents">
       <AccordionItem display="contents">
         <HStack spacing={8}>
-          <Text>{date}</Text>
+          <Box width={90}>
+            <Center>{date}</Center>
+          </Box>
           <Box width={10}>
             <Center>{record.point}</Center>
           </Box>
