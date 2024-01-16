@@ -6,8 +6,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { RecordInput, createRecord } from '@/mutations/createRecord';
 
-import { LabeledInput } from './LabeledInput';
-import { recordFormSchema } from './schemas';
+import { LabeledInput } from '../atoms/LabeledInput';
+import { recordFormSchema } from '../schemas';
 
 export const RecordForm: React.FC = () => {
   const methods = useForm<RecordInput>({ resolver: zodResolver(recordFormSchema) });
