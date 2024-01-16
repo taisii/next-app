@@ -72,9 +72,26 @@ const MatchResultRow: React.FC<matchResultProps> = ({ matchResult }) => {
               <Text>実施日</Text>
               <Text>{date}</Text>
             </HStack>
+            <MatchResultTable matchResult={matchResult} />
           </VStack>
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
+  );
+};
+
+const MatchResultTable: React.FC<matchResultProps> = ({ matchResult }) => {
+  const playerDatas = matchResult.matchPlayerDatas.sort((a, b) => b.point - a.point);
+  return (
+    <VStack>
+      {playerDatas.map((playerData) => {
+        return (
+          <HStack key={playerData.id}>
+            <Text>{playerData.player.name}</Text>
+            <Text>{playerData.point}</Text>
+          </HStack>
+        );
+      })}
+    </VStack>
   );
 };
