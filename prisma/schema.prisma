@@ -11,6 +11,27 @@ model Record {
   four      Int
 }
 
+model matchResult {
+  id               Int               @id @default(autoincrement())
+  matchPlayerDatas matchPlayerData[]
+  createdAt        DateTime          @default(now())
+}
+
+model player {
+  id              Int               @id @default(autoincrement())
+  name            String
+  matchPlayerData matchPlayerData[]
+}
+
+model matchPlayerData {
+  id            Int          @id @default(autoincrement())
+  player        player       @relation(fields: [playerId], references: [id])
+  point         Float
+  matchResult   matchResult? @relation(fields: [matchResultId], references: [id])
+  matchResultId Int?
+  playerId      Int
+}
+
 generator client {
   provider = "prisma-client-js"
 }

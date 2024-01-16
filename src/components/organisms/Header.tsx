@@ -17,6 +17,9 @@ export const Header: React.FC = () => {
             <MenuItem icon={<ExternalLinkIcon />} as={NextLink} href="/record">
               麻雀記録ページ
             </MenuItem>
+            <MenuItem icon={<ExternalLinkIcon />} as={NextLink} href="/king_of_keio">
+              慶王位
+            </MenuItem>
           </MenuList>
         </Portal>
       </Menu>
