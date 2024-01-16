@@ -1,8 +1,8 @@
 import { Card, CardBody, Text, VStack } from '@chakra-ui/react';
 import { NextPage } from 'next';
 
-import { RecordForm } from '@/components/RecordForm';
-import { RecordList } from '@/components/RecordList';
+import { RecordForm } from '@/components/organisms/RecordForm';
+import { RecordList } from '@/components/organisms/RecordList';
 import { prisma } from '@/infrastructures/prisma';
 
 export const dynamic = 'force-dynamic';

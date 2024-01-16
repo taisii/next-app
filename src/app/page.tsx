@@ -1,7 +1,7 @@
 import { Card, CardBody, Text, VStack } from '@chakra-ui/react';
 
-import { MemberList } from '@/components/MemberList';
-import { SpreadSheet } from '@/components/SpreadSheet';
+import { MemberList } from '@/components/organisms/MemberList';
+import { SpreadSheet } from '@/components/organisms/SpreadSheet';
 
 import type { NextPage } from 'next';
 

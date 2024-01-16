@@ -1,5 +1,5 @@
-import { Header } from '@/components/Header';
-import { Provider } from '@/components/Providers';
+import { Header } from '@/components/organisms/Header';
+import { Provider } from '@/components/organisms/Providers';
 
 export const metadata = {
   title: 'Next.js',
