@@ -11,6 +11,45 @@ model Record {
   four      Int
 }
 
+model League {
+  id       Int       @id @default(autoincrement())
+  name     String
+  players  Player[]
+  sessions Session[]
+}
+
+model Session {
+  id           Int           @id @default(autoincrement())
+  createAt     DateTime      @default(now())
+  matchResults MatchResult[]
+  league       League        @relation(fields: [leagueId], references: [id])
+  leagueId     Int
+}
+
+model MatchResult {
+  id           Int                @id @default(autoincrement())
+  MatchPlayerPoints MatchPlayerPoint[]
+  session      Session            @relation(fields: [sessionId], references: [id])
+  sessionId    Int
+}
+
+model Player {
+  id           Int                @id @default(autoincrement())
+  name         String
+  MatchPlayerPoints MatchPlayerPoint[]
+  league       League             @relation(fields: [leagueId], references: [id])
+  leagueId     Int
+}
+
+model MatchPlayerPoint {
+  id            Int         @id @default(autoincrement())
+  point         Float
+  matchResult   MatchResult @relation(fields: [matchResultId], references: [id])
+  matchResultId Int
+  player        Player      @relation(fields: [playerId], references: [id])
+  playerId      Int
+}
+
 generator client {
   provider = "prisma-client-js"
 }
