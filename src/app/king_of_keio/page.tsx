@@ -1,7 +1,8 @@
-import { Card, CardBody, ListItem, OrderedList, Text, VStack } from '@chakra-ui/react';
+import { Card, CardBody, ListItem, OrderedList, StackDivider, Text, VStack } from '@chakra-ui/react';
 import { NextPage } from 'next';
 
 import { prisma } from '@/infrastructures/prisma';
+import { SessionList } from '@/league/components/SessionList';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,9 +61,11 @@ const keioPage: NextPage = async () => {
         <Text fontSize={40}>対戦結果</Text>{' '}
         <Card>
           <CardBody>
-            {league.sessions.map((session) => {
-              return <Text key={session.id}>aaa</Text>;
-            })}
+            <VStack divider={<StackDivider borderColor="gray.200" />}>
+              {league.sessions.map((session) => {
+                return <SessionList key={session.id} session={session} />;
+              })}
+            </VStack>
           </CardBody>
         </Card>
       </VStack>
