@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 
 import { prisma } from '@/infrastructures/prisma';
 import { RankingDisplay } from '@/league/components/RankingDisplay';
+import { SessionForm } from '@/league/components/SessionForm';
 import { SessionList } from '@/league/components/SessionList';
 
 export const dynamic = 'force-dynamic';
@@ -56,6 +57,11 @@ const keioPage: NextPage = async () => {
           </CardBody>
         </Card>
         <Text fontSize={40}>入力</Text>
+        <Card>
+          <CardBody>
+            <SessionForm leagueId={LEAGUE_ID} />
+          </CardBody>
+        </Card>
       </VStack>
     </>
   );
