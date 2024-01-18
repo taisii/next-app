@@ -1,41 +1,68 @@
 import { Card, CardBody, ListItem, OrderedList, Text, VStack } from '@chakra-ui/react';
 import { NextPage } from 'next';
 
-import { MatchResultList } from '@/components/organisms/MatchResultRow';
 import { prisma } from '@/infrastructures/prisma';
 
+export const dynamic = 'force-dynamic';
+
+const LEAGUE_ID = 1;
+
 const keioPage: NextPage = async () => {
-  const matchResults = await prisma.matchResult.findMany({
+  const players = await prisma.player.findMany({
+    where: {
+      leagueId: LEAGUE_ID,
+    },
     select: {
-      id: true,
-      createdAt: true,
-      matchPlayerDatas: {
-        select: {
-          id: true,
-          player: true,
-          point: true,
+      name: true,
+      MatchPlayerPoints: true,
+    },
+  });
+
+  const league = await prisma.league.findUnique({
+    where: {
+      id: LEAGUE_ID,
+    },
+    select: {
+      sessions: {
+        include: {
+          matchResults: {
+            include: {
+              MatchPlayerPoints: true,
+            },
+          },
         },
       },
     },
-    orderBy: {
-      createdAt: 'asc',
-    },
   });
+
+  if (!league) {
+    return <></>;
+  }
+  const playerTotalPoints: { name: String; totalPoint: number }[] = [];
+
+  for (const player of players) {
+    let playerPoint = 0;
+    for (const matchPlayerPoint of player.MatchPlayerPoints) {
+      playerPoint += matchPlayerPoint.point;
+    }
+    playerTotalPoints.push({ name: player.name, totalPoint: playerPoint });
+  }
+  playerTotalPoints.sort((a, b) => b.totalPoint - a.totalPoint);
   return (
     <>
       <VStack>
         <Text fontSize={40}>慶王位</Text>
         <OrderedList>
-          <ListItem>飯田</ListItem>
-          <ListItem>安斎</ListItem>
-          <ListItem>植木</ListItem>
-          <ListItem>村岡</ListItem>
-          <ListItem>竹下</ListItem>
+          {playerTotalPoints.map((playerTotalPoint) => {
+            return <ListItem key={playerTotalPoint.totalPoint}>{playerTotalPoint.name}</ListItem>;
+          })}
         </OrderedList>
         <Text fontSize={40}>対戦結果</Text>{' '}
         <Card>
           <CardBody>
-            <MatchResultList matchResults={matchResults} />
+            {league.sessions.map((session) => {
+              return <Text key={session.id}>aaa</Text>;
+            })}
           </CardBody>
         </Card>
       </VStack>

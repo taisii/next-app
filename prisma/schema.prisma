@@ -11,24 +11,42 @@ model Record {
   four      Int
 }
 
-model matchResult {
-  id               Int               @id @default(autoincrement())
-  matchPlayerDatas matchPlayerData[]
-  createdAt        DateTime          @default(now())
+model League {
+  id       Int       @id @default(autoincrement())
+  name     String
+  players  Player[]
+  sessions Session[]
 }
 
-model player {
-  id              Int               @id @default(autoincrement())
-  name            String
-  matchPlayerData matchPlayerData[]
+model Session {
+  id           Int           @id @default(autoincrement())
+  createAt     DateTime      @default(now())
+  matchResults MatchResult[]
+  league       League        @relation(fields: [leagueId], references: [id])
+  leagueId     Int
 }
 
-model matchPlayerData {
-  id            Int          @id @default(autoincrement())
-  player        player       @relation(fields: [playerId], references: [id])
+model MatchResult {
+  id           Int                @id @default(autoincrement())
+  MatchPlayerPoints MatchPlayerPoint[]
+  session      Session            @relation(fields: [sessionId], references: [id])
+  sessionId    Int
+}
+
+model Player {
+  id           Int                @id @default(autoincrement())
+  name         String
+  MatchPlayerPoints MatchPlayerPoint[]
+  league       League             @relation(fields: [leagueId], references: [id])
+  leagueId     Int
+}
+
+model MatchPlayerPoint {
+  id            Int         @id @default(autoincrement())
   point         Float
-  matchResult   matchResult? @relation(fields: [matchResultId], references: [id])
-  matchResultId Int?
+  matchResult   MatchResult @relation(fields: [matchResultId], references: [id])
+  matchResultId Int
+  player        Player      @relation(fields: [playerId], references: [id])
   playerId      Int
 }
 
