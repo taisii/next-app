@@ -45,7 +45,7 @@ const keioPage: NextPage = async () => {
       <VStack>
         <Text fontSize={40}>慶王位</Text>
         <RankingDisplay players={players} />
-        <Text fontSize={40}>対戦結果</Text>{' '}
+        <Text fontSize={40}>対戦結果</Text>
         <Card>
           <CardBody>
             <VStack divider={<StackDivider borderColor="gray.200" />}>
@@ -55,6 +55,7 @@ const keioPage: NextPage = async () => {
             </VStack>
           </CardBody>
         </Card>
+        <Text fontSize={40}>入力</Text>
       </VStack>
     </>
   );
