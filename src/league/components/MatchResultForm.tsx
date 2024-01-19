@@ -2,10 +2,13 @@
 
 import { Box, Button, HStack, Input, Table, TableContainer, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
 import { playerIdToPlayerName } from './SessionList';
+import { useLeagueSelector } from '../contexts/leagueContext';
 import { createMatchPlayerPoint } from '../mutations/createMatchPlayerPoint';
 import { createMatchResult } from '../mutations/createMatchRecords';
 import { createSession } from '../mutations/createSession';
@@ -29,6 +32,9 @@ const SessionFormInputSchema = z.object({
 });
 
 export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const resetSessionForm = useLeagueSelector((v) => v.resetSessionForm);
+
   const defaultValues = {
     matchResults: [
       {
@@ -45,7 +51,9 @@ export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) =
     defaultValues,
   });
 
+  const router = useRouter();
   const handleFormSubmit = method.handleSubmit(async (data) => {
+    setIsLoading(true);
     const session = await createSession(LEAGUE_ID);
     if (!session) {
       return <></>;
@@ -58,7 +66,9 @@ export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) =
       await createMatchPlayerPoint(matchResult.id, matchResultData.matchPlayerPoints);
     }
 
-    console.log(data);
+    setIsLoading(false);
+    resetSessionForm();
+    router.refresh();
   });
 
   const { fields: matchResultFields, append } = useFieldArray({
@@ -93,7 +103,9 @@ export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) =
           </TableContainer>
           <HStack mt={4}>
             <Button onClick={() => append(defaultValues.matchResults)}>行の追加</Button>
-            <Button type="submit">submit</Button>
+            <Button type="submit" isLoading={isLoading}>
+              submit
+            </Button>
           </HStack>
         </Box>
       </FormProvider>

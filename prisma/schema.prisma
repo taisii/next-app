@@ -22,14 +22,14 @@ model Session {
   id           Int           @id @default(autoincrement())
   createdAt    DateTime      @default(now())
   matchResults MatchResult[]
-  league       League        @relation(fields: [leagueId], references: [id])
+  league       League        @relation(fields: [leagueId], references: [id], onDelete: Cascade)
   leagueId     Int
 }
 
 model MatchResult {
   id                Int                @id @default(autoincrement())
   MatchPlayerPoints MatchPlayerPoint[]
-  session           Session            @relation(fields: [sessionId], references: [id])
+  session           Session            @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId         Int
 }
 
@@ -37,16 +37,16 @@ model Player {
   id                Int                @id @default(autoincrement())
   name              String
   MatchPlayerPoints MatchPlayerPoint[]
-  league            League             @relation(fields: [leagueId], references: [id])
+  league            League             @relation(fields: [leagueId], references: [id], onDelete: Cascade)
   leagueId          Int
 }
 
 model MatchPlayerPoint {
   id            Int         @id @default(autoincrement())
   point         Float
-  matchResult   MatchResult @relation(fields: [matchResultId], references: [id])
+  matchResult   MatchResult @relation(fields: [matchResultId], references: [id], onDelete: Cascade)
   matchResultId Int
-  player        Player      @relation(fields: [playerId], references: [id])
+  player        Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId      Int
 }
 
