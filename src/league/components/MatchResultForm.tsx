@@ -1,7 +1,9 @@
 'use client';
 
-import { Button, Input, Table, TableContainer, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Button, HStack, Input, Table, TableContainer, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
+import { z } from 'zod';
 
 import { playerIdToPlayerName } from './SessionList';
 
@@ -9,37 +11,115 @@ interface MatchResultFormProps {
   playerIds: number[];
 }
 
+interface SessionFormInput {
+  matchResults: {
+    matchPlayerPoints: MatchPlayerPoint[];
+  }[];
+}
+
+const SessionFormInputSchema = z.object({
+  matchResults: z.array(
+    z.object({
+      matchPlayerPoints: z.array(
+        z.object({
+          playerId: z.coerce.number(),
+          point: z.coerce.number(),
+        })
+      ),
+    })
+  ),
+});
+
+interface MatchPlayerPoint {
+  playerId: number;
+  point: number;
+}
+
 export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) => {
-  const [matchCount, setMatchCount] = useState(4);
+  const defaultValues = {
+    matchResults: [
+      {
+        matchPlayerPoints: [] as MatchPlayerPoint[],
+      },
+    ],
+  };
+  for (const playerId of playerIds) {
+    defaultValues.matchResults[0].matchPlayerPoints.push({ playerId, point: 0 });
+  }
+
+  const method = useForm<SessionFormInput>({
+    resolver: zodResolver(SessionFormInputSchema),
+    defaultValues,
+  });
+
+  const handleFormSubmit = method.handleSubmit(async (data) => {
+    console.log(data);
+  });
+
+  const { fields: matchResultFields, append } = useFieldArray({
+    control: method.control,
+    name: 'matchResults',
+  });
+
+  //TODO: formのエラーハンドリング
   return (
     <VStack>
-      <TableContainer>
-        <Table size="sm">
-          <Thead>
-            <Tr>
-              {playerIds.map((playerId) => {
-                return <Th key={playerId}>{playerIdToPlayerName[playerId]}</Th>;
-              })}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {Array.from({ length: matchCount }).map((_, index) => {
-              return (
-                <Tr key={index}>
+      <FormProvider {...method}>
+        <Box as="form" onSubmit={handleFormSubmit}>
+          <TableContainer>
+            <Table size="sm">
+              <Thead>
+                <Tr>
                   {playerIds.map((playerId) => {
-                    return (
-                      <Td key={playerId}>
-                        <Input size="sm"></Input>
-                      </Td>
-                    );
+                    return <Th key={playerId}>{playerIdToPlayerName[playerId]}</Th>;
                   })}
                 </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <Button onClick={() => setMatchCount(matchCount + 1)}>行の追加</Button>
+              </Thead>
+              <Tbody>
+                {matchResultFields.map((matchResult, matchResultIndex) => {
+                  return (
+                    <Tr key={matchResult.id}>
+                      <MatchResultRow index={matchResultIndex} />
+                    </Tr>
+                  );
+                })}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          <HStack mt={4}>
+            <Button onClick={() => append(defaultValues.matchResults)}>行の追加</Button>
+            <Button type="submit">submit</Button>
+          </HStack>
+        </Box>
+      </FormProvider>
+      {method.formState.errors.matchResults && <p>{method.formState.errors.matchResults.message}</p>}
     </VStack>
+  );
+};
+
+interface MatchResultRowProps {
+  index: number;
+}
+
+const MatchResultRow: React.FC<MatchResultRowProps> = ({ index }) => {
+  const { control } = useFormContext();
+  const { fields: MatchResultRowFields } = useFieldArray({
+    control,
+    name: `matchResults.${index}.matchPlayerPoints`,
+  });
+  return (
+    <>
+      {MatchResultRowFields.map((field, fieldindex) => {
+        return (
+          <Td key={field.id}>
+            <Controller
+              control={control}
+              name={`matchResults.${index}.matchPlayerPoints.${fieldindex}.point`}
+              render={({ field }) => <Input {...field} />}
+            />
+          </Td>
+        );
+      })}
+    </>
   );
 };
