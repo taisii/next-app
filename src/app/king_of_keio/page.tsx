@@ -3,11 +3,11 @@ import { NextPage } from 'next';
 
 import { prisma } from '@/infrastructures/prisma';
 import { RankingDisplay } from '@/league/components/RankingDisplay';
+import { SessionForm } from '@/league/components/SessionForm';
 import { SessionList } from '@/league/components/SessionList';
+import { LEAGUE_ID } from '@/league/types';
 
 export const dynamic = 'force-dynamic';
-
-const LEAGUE_ID = 1;
 
 const keioPage: NextPage = async () => {
   const players = await prisma.player.findMany({
@@ -56,6 +56,11 @@ const keioPage: NextPage = async () => {
           </CardBody>
         </Card>
         <Text fontSize={40}>入力</Text>
+        <Card>
+          <CardBody>
+            <SessionForm leagueId={LEAGUE_ID} />
+          </CardBody>
+        </Card>
       </VStack>
     </>
   );

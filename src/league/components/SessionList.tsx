@@ -97,7 +97,7 @@ export const SessionList: React.FC<SessionListProps> = ({ session }) => {
   );
 };
 
-const playerIdToPlayerName: Record<number, string> = {
+export const playerIdToPlayerName: Record<number, string> = {
   1: '飯田',
   2: '安斎',
   3: '植木',

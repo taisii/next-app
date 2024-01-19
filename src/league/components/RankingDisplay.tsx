@@ -13,14 +13,14 @@ interface RankingDisplayProps {
 }
 
 export const RankingDisplay: React.FC<RankingDisplayProps> = ({ players }) => {
-  const playerTotalPoints: { name: String; totalPoint: number }[] = [];
+  const playerTotalPoints: { name: string; totalPoint: number }[] = [];
 
   for (const player of players) {
     let playerPoint = 0;
     for (const matchPlayerPoint of player.MatchPlayerPoints) {
       playerPoint += matchPlayerPoint.point;
     }
-    playerTotalPoints.push({ name: player.name, totalPoint: playerPoint });
+    playerTotalPoints.push({ name: player.name, totalPoint: roundToTwoDecimals(playerPoint) });
   }
   playerTotalPoints.sort((a, b) => b.totalPoint - a.totalPoint);
   return (
@@ -44,3 +44,7 @@ export const RankingDisplay: React.FC<RankingDisplayProps> = ({ players }) => {
     </OrderedList>
   );
 };
+
+function roundToTwoDecimals(num: number): number {
+  return Number(num.toFixed(2));
+}
