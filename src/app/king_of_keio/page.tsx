@@ -56,7 +56,7 @@ const keioPage: NextPage = async () => {
           </CardBody>
         </Card>
         <Text fontSize={40}>入力</Text>
-        <Card>
+        <Card m={4}>
           <CardBody>
             <SessionForm leagueId={LEAGUE_ID} />
           </CardBody>

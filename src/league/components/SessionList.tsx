@@ -19,6 +19,8 @@ import {
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
+import { DeleteSessionButton } from './DeleteSessionButton';
+
 interface SessionListProps {
   session: {
     matchResults: ({
@@ -53,18 +55,18 @@ export const SessionList: React.FC<SessionListProps> = ({ session }) => {
   return (
     <Accordion key={session.id} allowToggle display="contents">
       <AccordionItem display="contents">
-        <HStack spacing={8}>
-          {playerNames.map((playerName) => {
-            return <Text key={playerName}>{playerName}</Text>;
-          })}
-          <AccordionButton display="contents">
+        <AccordionButton display="contents">
+          <HStack spacing={8}>
+            {playerNames.map((playerName) => {
+              return <Text key={playerName}>{playerName}</Text>;
+            })}
             <AccordionIcon />
-          </AccordionButton>
-        </HStack>
+          </HStack>
+        </AccordionButton>
         <AccordionPanel>
           <VStack>
             <HStack>
-              <Text>実施日</Text>
+              <Text>記入日</Text>
               <Text>{date}</Text>
             </HStack>
             <TableContainer>
@@ -90,6 +92,7 @@ export const SessionList: React.FC<SessionListProps> = ({ session }) => {
                 </Tbody>
               </Table>
             </TableContainer>
+            <DeleteSessionButton sessionId={session.id} />
           </VStack>
         </AccordionPanel>
       </AccordionItem>
