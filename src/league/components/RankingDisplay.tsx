@@ -13,7 +13,7 @@ interface RankingDisplayProps {
 }
 
 export const RankingDisplay: React.FC<RankingDisplayProps> = ({ players }) => {
-  const playerTotalPoints: { name: String; totalPoint: number }[] = [];
+  const playerTotalPoints: { name: string; totalPoint: number }[] = [];
 
   for (const player of players) {
     let playerPoint = 0;
