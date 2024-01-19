@@ -5,13 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
-import { LEAGUE_ID } from '@/app/king_of_keio/page';
-
 import { playerIdToPlayerName } from './SessionList';
 import { createMatchPlayerPoint } from '../mutations/createMatchPlayerPoint';
 import { createMatchResult } from '../mutations/createMatchRecords';
 import { createSession } from '../mutations/createSession';
-import { MatchPlayerPoint, SessionFormInput } from '../types';
+import { LEAGUE_ID, MatchPlayerPoint, SessionFormInput } from '../types';
 
 interface MatchResultFormProps {
   playerIds: number[];

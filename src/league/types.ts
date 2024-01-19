@@ -12,3 +12,5 @@ export interface MatchPlayerPoint {
   playerId: number;
   point: number;
 }
+
+export const LEAGUE_ID = 1;

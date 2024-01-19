@@ -5,10 +5,9 @@ import { prisma } from '@/infrastructures/prisma';
 import { RankingDisplay } from '@/league/components/RankingDisplay';
 import { SessionForm } from '@/league/components/SessionForm';
 import { SessionList } from '@/league/components/SessionList';
+import { LEAGUE_ID } from '@/league/types';
 
 export const dynamic = 'force-dynamic';
-
-export const LEAGUE_ID = 1;
 
 const keioPage: NextPage = async () => {
   const players = await prisma.player.findMany({
