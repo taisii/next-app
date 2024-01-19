@@ -8,7 +8,7 @@ import { SessionList } from '@/league/components/SessionList';
 
 export const dynamic = 'force-dynamic';
 
-const LEAGUE_ID = 1;
+export const LEAGUE_ID = 1;
 
 const keioPage: NextPage = async () => {
   const players = await prisma.player.findMany({

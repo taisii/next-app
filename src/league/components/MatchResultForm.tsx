@@ -5,16 +5,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
+import { LEAGUE_ID } from '@/app/king_of_keio/page';
+
 import { playerIdToPlayerName } from './SessionList';
+import { createMatchPlayerPoint } from '../mutations/createMatchPlayerPoint';
+import { createMatchResult } from '../mutations/createMatchRecords';
+import { createSession } from '../mutations/createSession';
+import { MatchPlayerPoint, SessionFormInput } from '../types';
 
 interface MatchResultFormProps {
   playerIds: number[];
-}
-
-interface SessionFormInput {
-  matchResults: {
-    matchPlayerPoints: MatchPlayerPoint[];
-  }[];
 }
 
 const SessionFormInputSchema = z.object({
@@ -29,11 +29,6 @@ const SessionFormInputSchema = z.object({
     })
   ),
 });
-
-interface MatchPlayerPoint {
-  playerId: number;
-  point: number;
-}
 
 export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) => {
   const defaultValues = {
@@ -53,6 +48,18 @@ export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) =
   });
 
   const handleFormSubmit = method.handleSubmit(async (data) => {
+    const session = await createSession(LEAGUE_ID);
+    if (!session) {
+      return <></>;
+    }
+    for (const matchResultData of data.matchResults) {
+      const matchResult = await createMatchResult(session.id);
+      if (!matchResult) {
+        return <></>;
+      }
+      await createMatchPlayerPoint(matchResult.id, matchResultData.matchPlayerPoints);
+    }
+
     console.log(data);
   });
 
