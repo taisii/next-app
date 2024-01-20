@@ -14,6 +14,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { deleteSession } from '../mutations/deleteSession';
@@ -25,6 +26,7 @@ interface DeleteSessionButtonProps extends ButtonProps {
 export const DeleteSessionButton: React.FC<DeleteSessionButtonProps> = ({ sessionId, ...Props }) => {
   const [isDeleteing, setIsDeleting] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
   return (
     <>
       <IconButton
@@ -51,6 +53,7 @@ export const DeleteSessionButton: React.FC<DeleteSessionButtonProps> = ({ sessio
               onClick={async () => {
                 setIsDeleting(true);
                 await deleteSession(sessionId);
+                router.refresh();
                 onClose();
                 setIsDeleting(false);
               }}

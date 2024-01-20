@@ -154,7 +154,7 @@ const MatchResultRow: React.FC<MatchResultRowProps> = ({ index }) => {
             <Controller
               control={control}
               name={`matchResults.${index}.matchPlayerPoints.${fieldindex}.point`}
-              render={({ field }) => <Input size="xs" {...field} />}
+              render={({ field }) => <Input size="sm" {...field} />}
             />
           </Td>
         );
