@@ -1,7 +1,5 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-
 import { prisma } from '@/infrastructures/prisma';
 
 export const deleteSession = async (sessionId: number) => {
@@ -10,5 +8,4 @@ export const deleteSession = async (sessionId: number) => {
       id: sessionId,
     },
   });
-  revalidateTag('session');
 };
