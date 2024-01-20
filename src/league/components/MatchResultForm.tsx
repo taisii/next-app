@@ -1,6 +1,20 @@
 'use client';
 
-import { Box, Button, HStack, Input, Table, TableContainer, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  HStack,
+  Input,
+  Spacer,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  VStack,
+} from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -71,7 +85,11 @@ export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) =
     router.refresh();
   });
 
-  const { fields: matchResultFields, append } = useFieldArray({
+  const {
+    fields: matchResultFields,
+    append,
+    remove,
+  } = useFieldArray({
     control: method.control,
     name: 'matchResults',
   });
@@ -102,9 +120,13 @@ export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) =
             </Table>
           </TableContainer>
           <HStack mt={4}>
-            <Button onClick={() => append(defaultValues.matchResults)}>行の追加</Button>
-            <Button type="submit" isLoading={isLoading}>
-              submit
+            <Button onClick={() => remove(matchResultFields.length - 1)} color="red">
+              削除
+            </Button>
+            <Button onClick={() => append(defaultValues.matchResults)}>追加</Button>
+            <Spacer />
+            <Button type="submit" isLoading={isLoading} border={1} borderColor="black" borderStyle="solid">
+              記録
             </Button>
           </HStack>
         </Box>
@@ -132,7 +154,7 @@ const MatchResultRow: React.FC<MatchResultRowProps> = ({ index }) => {
             <Controller
               control={control}
               name={`matchResults.${index}.matchPlayerPoints.${fieldindex}.point`}
-              render={({ field }) => <Input {...field} />}
+              render={({ field }) => <Input size="xs" {...field} />}
             />
           </Td>
         );
