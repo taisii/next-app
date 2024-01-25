@@ -11,6 +11,8 @@ interface LeagueContextValue {
   sessionFormIsClicked: boolean;
   seteSsionFormIsClicke: Dispatch<SetStateAction<boolean>>;
   resetSessionForm: () => void;
+  playerIdToPlayerName: Record<number, string>;
+  setPlayerIdToPlayerName: Dispatch<SetStateAction<Record<number, string>>>;
 }
 
 const Context = createContext<LeagueContextValue>(undefined as unknown as LeagueContextValue);
@@ -32,6 +34,9 @@ export const LeagueProvider: React.FC<Props> = ({ children }) => {
     setSessionPlayerIds([]);
     seteSsionFormIsClicke(false);
   };
+
+  const [playerIdToPlayerName, setPlayerIdToPlayerName] = useState<Record<number, string>>({});
+
   return (
     <Context.Provider
       value={{
@@ -42,6 +47,8 @@ export const LeagueProvider: React.FC<Props> = ({ children }) => {
         sessionFormIsClicked,
         seteSsionFormIsClicke,
         resetSessionForm,
+        playerIdToPlayerName,
+        setPlayerIdToPlayerName,
       }}
     >
       {children}

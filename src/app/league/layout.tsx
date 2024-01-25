@@ -4,8 +4,8 @@ export interface LayoutProps {
   children: React.ReactNode;
 }
 
-const KingOFKeioLayout: React.FC<LayoutProps> = ({ children }) => {
+const LeagueLayout: React.FC<LayoutProps> = ({ children }) => {
   return <LeagueProvider>{children}</LeagueProvider>;
 };
 
-export default KingOFKeioLayout;
+export default LeagueLayout;

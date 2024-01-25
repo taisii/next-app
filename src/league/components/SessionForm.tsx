@@ -7,12 +7,22 @@ import { MatchResultForm } from './MatchResultForm';
 import { useLeagueSelector } from '../contexts/leagueContext';
 
 interface SessionFormProps {
+  players: {
+    id: number;
+    name: string;
+    MatchPlayerPoints: {
+      id: number;
+      point: number;
+      matchResultId: number;
+      playerId: number;
+    }[];
+  }[];
   leagueId: number;
 }
 
 const CheckboxGroupSchema = z.array(z.number());
 
-export const SessionForm: React.FC<SessionFormProps> = ({ leagueId }) => {
+export const SessionForm: React.FC<SessionFormProps> = ({ players, leagueId }) => {
   const playerIds = useLeagueSelector((v) => v.playerIds);
   const setPlayerIds = useLeagueSelector((v) => v.setPlayerIds);
   const isClicked = useLeagueSelector((v) => v.sessionFormIsClicked);
@@ -39,17 +49,17 @@ export const SessionForm: React.FC<SessionFormProps> = ({ leagueId }) => {
     <VStack>
       <HStack>
         <CheckboxGroup value={playerIds as (string | number)[]} onChange={handleCheckboxChange} isDisabled={isClicked}>
-          <Checkbox value={1}>飯田</Checkbox>
-          <Checkbox value={2}>安斎</Checkbox>
-          <Checkbox value={3}>植木</Checkbox>
-          <Checkbox value={4}>村岡</Checkbox>
-          <Checkbox value={5}>竹下</Checkbox>
+          {players.map((player) => (
+            <Checkbox value={player.id} key={player.id}>
+              {player.name}
+            </Checkbox>
+          ))}
         </CheckboxGroup>
       </HStack>
       <Button onClick={handleCreateButtonClick} isDisabled={isClicked}>
         作成
       </Button>
-      {isClicked && <MatchResultForm playerIds={sessionPlayerIds} />}
+      {isClicked && <MatchResultForm playerIds={sessionPlayerIds} leagueId={leagueId} />}
     </VStack>
   );
 };

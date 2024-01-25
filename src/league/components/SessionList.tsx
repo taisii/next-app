@@ -18,8 +18,10 @@ import {
   Td,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import { useEffect } from 'react';
 
 import { DeleteSessionButton } from './DeleteSessionButton';
+import { useLeagueSelector } from '../contexts/leagueContext';
 
 interface SessionListProps {
   session: {
@@ -39,11 +41,31 @@ interface SessionListProps {
     createdAt: Date;
     leagueId: number;
   };
+  players: {
+    name: string;
+    id: number;
+    MatchPlayerPoints: {
+      id: number;
+      point: number;
+      matchResultId: number;
+      playerId: number;
+    }[];
+  }[];
 }
 
-// TODO: sessionからうまくplayer名をとる方法
-export const SessionList: React.FC<SessionListProps> = ({ session }) => {
+export const SessionList: React.FC<SessionListProps> = ({ session, players }) => {
   const date = dayjs(session.createdAt).format('YYYY/M/D');
+  const setPlayerIdToPlayerName = useLeagueSelector((v) => v.setPlayerIdToPlayerName);
+  const playerIdToPlayerName = useLeagueSelector((v) => v.playerIdToPlayerName);
+
+  useEffect(() => {
+    const tempPlayerIdToPlayerName: Record<number, string> = {};
+    for (const player of players) {
+      tempPlayerIdToPlayerName[player.id] = player.name;
+    }
+    setPlayerIdToPlayerName(tempPlayerIdToPlayerName);
+  }, []);
+
   const playerIds: number[] = [];
   for (const matchPlayerPoint of session.matchResults[0].MatchPlayerPoints) {
     if (!playerIds.includes(matchPlayerPoint.playerId)) {
@@ -57,8 +79,8 @@ export const SessionList: React.FC<SessionListProps> = ({ session }) => {
       <AccordionItem display="contents">
         <AccordionButton display="contents">
           <HStack spacing={8}>
-            {playerNames.map((playerName) => {
-              return <Text key={playerName}>{playerName}</Text>;
+            {playerNames.map((playerName, index) => {
+              return <Text key={playerIds[index]}>{playerName}</Text>;
             })}
             <AccordionIcon />
           </HStack>
@@ -73,8 +95,8 @@ export const SessionList: React.FC<SessionListProps> = ({ session }) => {
               <Table size="sm">
                 <Thead>
                   <Tr>
-                    {playerNames.map((playerName) => (
-                      <Th key={playerName}>{playerName}</Th>
+                    {playerNames.map((playerName, index) => (
+                      <Th key={playerIds[index]}>{playerName}</Th>
                     ))}
                   </Tr>
                 </Thead>
@@ -98,12 +120,4 @@ export const SessionList: React.FC<SessionListProps> = ({ session }) => {
       </AccordionItem>
     </Accordion>
   );
-};
-
-export const playerIdToPlayerName: Record<number, string> = {
-  1: '飯田',
-  2: '安斎',
-  3: '植木',
-  4: '村岡',
-  5: '竹下',
 };

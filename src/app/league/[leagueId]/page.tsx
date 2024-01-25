@@ -5,26 +5,32 @@ import { prisma } from '@/infrastructures/prisma';
 import { RankingDisplay } from '@/league/components/RankingDisplay';
 import { SessionForm } from '@/league/components/SessionForm';
 import { SessionList } from '@/league/components/SessionList';
-import { LEAGUE_ID } from '@/league/types';
 
 export const dynamic = 'force-dynamic';
 
-const keioPage: NextPage = async () => {
+interface Props {
+  params: { leagueId: string };
+}
+
+const LeaguePage: NextPage<Props> = async ({ params }) => {
+  const leagueId = Number(params.leagueId);
   const players = await prisma.player.findMany({
     where: {
-      leagueId: LEAGUE_ID,
+      leagueId,
     },
     select: {
       name: true,
       MatchPlayerPoints: true,
+      id: true,
     },
   });
 
   const league = await prisma.league.findUnique({
     where: {
-      id: LEAGUE_ID,
+      id: leagueId,
     },
     select: {
+      name: true,
       sessions: {
         include: {
           matchResults: {
@@ -43,14 +49,14 @@ const keioPage: NextPage = async () => {
   return (
     <>
       <VStack>
-        <Text fontSize={40}>慶王位</Text>
-        <RankingDisplay players={players} />
+        <Text fontSize={40}>{league.name}</Text>
+        <RankingDisplay players={players} leagueId={leagueId} />
         <Text fontSize={40}>対戦結果</Text>
         <Card>
           <CardBody>
             <VStack divider={<StackDivider borderColor="gray.200" />}>
               {league.sessions.map((session) => {
-                return <SessionList key={session.id} session={session} />;
+                return <SessionList key={session.id} session={session} players={players} />;
               })}
             </VStack>
           </CardBody>
@@ -58,7 +64,7 @@ const keioPage: NextPage = async () => {
         <Text fontSize={40}>入力</Text>
         <Card m={4}>
           <CardBody>
-            <SessionForm leagueId={LEAGUE_ID} />
+            <SessionForm players={players} leagueId={leagueId} />
           </CardBody>
         </Card>
       </VStack>
@@ -66,4 +72,4 @@ const keioPage: NextPage = async () => {
   );
 };
 
-export default keioPage;
+export default LeaguePage;
