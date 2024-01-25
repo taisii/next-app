@@ -21,15 +21,15 @@ import { useState } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
-import { playerIdToPlayerName } from './SessionList';
 import { useLeagueSelector } from '../contexts/leagueContext';
 import { createMatchPlayerPoint } from '../mutations/createMatchPlayerPoint';
 import { createMatchResult } from '../mutations/createMatchRecords';
 import { createSession } from '../mutations/createSession';
-import { LEAGUE_ID, MatchPlayerPoint, SessionFormInput } from '../types';
+import { MatchPlayerPoint, SessionFormInput } from '../types';
 
 interface MatchResultFormProps {
   playerIds: number[];
+  leagueId: number;
 }
 
 const SessionFormInputSchema = z.object({
@@ -45,9 +45,10 @@ const SessionFormInputSchema = z.object({
   ),
 });
 
-export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) => {
+export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds, leagueId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const resetSessionForm = useLeagueSelector((v) => v.resetSessionForm);
+  const playerIdToPlayerName = useLeagueSelector((v) => v.playerIdToPlayerName);
 
   const defaultValues = {
     matchResults: [
@@ -68,7 +69,7 @@ export const MatchResultForm: React.FC<MatchResultFormProps> = ({ playerIds }) =
   const router = useRouter();
   const handleFormSubmit = method.handleSubmit(async (data) => {
     setIsLoading(true);
-    const session = await createSession(LEAGUE_ID);
+    const session = await createSession(leagueId);
     if (!session) {
       return <></>;
     }
