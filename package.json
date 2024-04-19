@@ -19,10 +19,12 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.4",
-    "@prisma/client": "^5.7.1",
+    "@prisma/client": "^5.12.1",
+    "@vercel/postgres": "^0.8.0",
     "dayjs": "^1.11.10",
     "framer-motion": "^10.17.4",
     "next": "14.0.4",
+    "prisma": "^5.12.1",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.49.2",
@@ -40,7 +42,6 @@
     "eslint-plugin-prettier": "^5.1.2",
     "eslint-plugin-unused-imports": "^3.0.0",
     "prettier": "^3.1.1",
-    "prisma": "^5.7.1",
     "typescript": "^5"
   }
 }

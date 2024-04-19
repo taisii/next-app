@@ -1,60 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-model Record {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  point     Int
-  top       Int
-  second    Int
-  three     Int
-  four      Int
-}
-
-model League {
-  id       Int       @id @default(autoincrement())
-  name     String
-  players  Player[]
-  sessions Session[]
-}
-
-model Session {
-  id           Int           @id @default(autoincrement())
-  createdAt    DateTime      @default(now())
-  matchResults MatchResult[]
-  league       League        @relation(fields: [leagueId], references: [id], onDelete: Cascade)
-  leagueId     Int
-}
-
-model MatchResult {
-  id                Int                @id @default(autoincrement())
-  MatchPlayerPoints MatchPlayerPoint[]
-  session           Session            @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  sessionId         Int
-}
-
-model Player {
-  id                Int                @id @default(autoincrement())
-  name              String
-  MatchPlayerPoints MatchPlayerPoint[]
-  league            League             @relation(fields: [leagueId], references: [id], onDelete: Cascade)
-  leagueId          Int
-}
-
-model MatchPlayerPoint {
-  id            Int         @id @default(autoincrement())
-  point         Float
-  matchResult   MatchResult @relation(fields: [matchResultId], references: [id], onDelete: Cascade)
-  matchResultId Int
-  player        Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId      Int
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model League {
+  id Int @id @default(autoincrement())
 }
