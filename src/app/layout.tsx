@@ -1,4 +1,3 @@
-import { Header } from '@/components/organisms/Header';
 import { Provider } from '@/components/organisms/Providers';
 
 export const metadata = {
@@ -10,10 +9,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja_JP">
       <body>
-        <Provider>
-          <Header />
-          {children}
-        </Provider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

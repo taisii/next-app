@@ -1,17 +1,30 @@
-import { extendTheme } from '@chakra-ui/react';
+import { baseTheme, extendTheme, withDefaultColorScheme, withDefaultVariant } from '@chakra-ui/react';
 
-export const theme = extendTheme({
-  styles: {
-    global: {
-      body: {
-        bgColor: 'white',
-        bgImage: 'url(/images/bg_m.jpg)',
-        bgRepeat: 'repeat',
-        bgSize: '100%',
-        color: 'brack',
-        lineHeight: 1.75,
-        touchAction: 'manipulation',
+export const theme = extendTheme(
+  {
+    colors: {
+      brand: baseTheme.colors.red,
+    },
+    components: {
+      Alert: {
+        defaultProps: {
+          colorScheme: 'blue',
+          borderRadius: `full`,
+        },
+      },
+      Button: {
+        baseStyle: {
+          borderRadius: 'full',
+        },
+      },
+      Input: {
+        baseStyle: {},
       },
     },
   },
-});
+  withDefaultColorScheme({ colorScheme: 'green' }),
+  withDefaultVariant({
+    variant: 'outline',
+    components: ['Input', 'NumberInput', 'PinInput'],
+  })
+);

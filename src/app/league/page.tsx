@@ -1,16 +1,38 @@
-import { Text, VStack } from '@chakra-ui/react';
+'use client';
+
+import { Box, Button, Input, VStack } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import { ChangeEvent, useState } from 'react';
 
-import { CreateLeagueForm } from '@/league/components/CreateLeagueForm';
+const LeagueInitPage: NextPage = () => {
+  const [nameList, setNameList] = useState<String[]>([]);
+  const [addingName, setAddingName] = useState('');
 
-const LeagueInitPage: NextPage = async () => {
+  const handleOnChangeText = (e: ChangeEvent<HTMLInputElement>) => {
+    setAddingName(e.target.value);
+  };
+
+  const handleClickAddButton = () => {
+    setNameList([...nameList, addingName]);
+    setAddingName('');
+  };
+
   return (
-    <>
-      <VStack>
-        <Text fontSize={40}>リーグ作成</Text>
-        <CreateLeagueForm />
-      </VStack>
-    </>
+    <VStack mt={10}>
+      <Input
+        size="lg"
+        width="90%"
+        placeholder="name"
+        focusBorderColor="yellow.500"
+        value={addingName}
+        onChange={handleOnChangeText}
+      />
+      <Button onClick={handleClickAddButton}>Add</Button>
+      {nameList.map((name, index) => (
+        <Box key={index}>{name}</Box>
+      ))}
+      <Button>Finalise</Button>
+    </VStack>
   );
 };
 
