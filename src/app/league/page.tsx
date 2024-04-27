@@ -4,8 +4,10 @@ import { Box, Button, Flex, FormControl, FormErrorMessage, Input, VStack } from 
 import { NextPage } from 'next';
 import { ChangeEvent, useState } from 'react';
 
+import { UserCard } from '@/league/Components/UserCard';
+
 const LeagueInitPage: NextPage = () => {
-  const [nameList, setNameList] = useState<String[]>([]);
+  const [nameList, setNameList] = useState<string[]>([]);
   const [addingName, setAddingName] = useState('');
   const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
   const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
@@ -43,9 +45,11 @@ const LeagueInitPage: NextPage = () => {
         </FormControl>
 
         <Button onClick={handleClickAddButton}>Add</Button>
-        {nameList.map((name, index) => (
-          <Box key={index}>{name}</Box>
-        ))}
+        <Box mt="1rem">
+          {nameList.map((name, index) => (
+            <UserCard key={index} userName={name} nameList={nameList} setNameList={setNameList} />
+          ))}
+        </Box>
       </Flex>
       <Button position="fixed" width="90%" mb="2rem" bottom={0}>
         Finalise
