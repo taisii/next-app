@@ -2,10 +2,12 @@
 
 import { Box, Button, Flex, FormControl, FormErrorMessage, Input, VStack } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
-import { createLeague } from '@/league/actions/mutations/CreateLeague';
-import { UserCard } from '@/league/Components/UserCard';
+import { UserCard } from './_components/UserCard';
+
+// import { createLeague } from '@/league/actions/mutations/CreateLeague';
 
 const LeagueInitPage: NextPage = () => {
   const [nameList, setNameList] = useState<string[]>([]);
@@ -13,6 +15,7 @@ const LeagueInitPage: NextPage = () => {
   const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
   const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
   const [isFinalizedButtonLoading, setIsFinalizedButtonLoading] = useState(false);
+  const router = useRouter();
 
   const handleOnChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     setAddingName(e.target.value);
@@ -31,7 +34,9 @@ const LeagueInitPage: NextPage = () => {
 
   const handleFinalize = async () => {
     setIsFinalizedButtonLoading(true);
-    const league = await createLeague(nameList);
+    // const league = await createLeague(nameList);
+    const league = { id: 1 };
+    router.push(`/league/${league.id}`);
   };
 
   return (
