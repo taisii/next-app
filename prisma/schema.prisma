@@ -9,5 +9,40 @@ datasource db {
 }
 
 model League {
-  id Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
+  teamList Team[]
+  userList User[]
+}
+
+model Team {
+  id         Int    @id @default(autoincrement())
+  League     League @relation(fields: [leagueId], references: [id])
+  leagueId   Int
+  memberList User[]
+}
+
+model User {
+  id                  Int               @id @default(autoincrement())
+  name                String
+  League              League            @relation(fields: [leagueId], references: [id])
+  leagueId            Int
+  Team                Team?             @relation(fields: [teamId], references: [id])
+  teamId              Int?
+  matchUserResultList MatchUserResult[]
+}
+
+model Match {
+  id                  Int               @id @default(autoincrement())
+  date                DateTime          @default(now())
+  matchUserResultList MatchUserResult[]
+}
+
+model MatchUserResult {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+  Match   Match? @relation(fields: [matchId], references: [id])
+  matchId Int?
+  rank    Int
+  point   Int
 }
