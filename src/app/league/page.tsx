@@ -2,15 +2,20 @@
 
 import { Box, Button, Flex, FormControl, FormErrorMessage, Input, VStack } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
-import { UserCard } from '@/league/Components/UserCard';
+import { UserCard } from './_components/UserCard';
+
+// import { createLeague } from '@/league/actions/mutations/CreateLeague';
 
 const LeagueInitPage: NextPage = () => {
   const [nameList, setNameList] = useState<string[]>([]);
   const [addingName, setAddingName] = useState('');
   const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
   const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
+  const [isFinalizedButtonLoading, setIsFinalizedButtonLoading] = useState(false);
+  const router = useRouter();
 
   const handleOnChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     setAddingName(e.target.value);
@@ -25,6 +30,13 @@ const LeagueInitPage: NextPage = () => {
       setNameList([...nameList, addingName]);
       setAddingName('');
     }
+  };
+
+  const handleFinalize = async () => {
+    setIsFinalizedButtonLoading(true);
+    // const league = await createLeague(nameList);
+    const league = { id: 1 };
+    router.push(`/league/${league.id}`);
   };
 
   return (
@@ -51,7 +63,14 @@ const LeagueInitPage: NextPage = () => {
           ))}
         </Box>
       </Flex>
-      <Button position="fixed" width="90%" mb="2rem" bottom={0}>
+      <Button
+        position="fixed"
+        width="90%"
+        mb="2rem"
+        bottom={0}
+        onClick={handleFinalize}
+        isLoading={isFinalizedButtonLoading}
+      >
         Finalise
       </Button>
     </VStack>
