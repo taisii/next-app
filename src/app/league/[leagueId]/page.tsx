@@ -22,7 +22,7 @@ import { User } from '@prisma/client';
 import { useEffect, useState } from 'react';
 import { FaRankingStar } from 'react-icons/fa6';
 
-import { getLeagueUsers } from '../_actions/queries/GetLeagueUsers';
+import { getLeagueUserList } from '../_actions/queries/GetLeagueUsers';
 import { UserSelectCard } from '../_components/UserSelectCard';
 
 const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
@@ -33,15 +33,15 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const ApiResponceUserList = await getLeagueUsers(leagueId);
+      const ApiResponceUserList = await getLeagueUserList(leagueId);
       setUserList(ApiResponceUserList);
     };
     fetchUserData();
   }, [leagueId]);
 
-  // const handleOnClickCheckBox=(value:)=>{
-  //   setSelectedUserIdList(id);
-  // }
+  const userIdListQueryStrings = selectedUserIdList
+    .map((selectedUserId) => `selectedUserId=${selectedUserId}`)
+    .join('&');
 
   return (
     <>
@@ -78,8 +78,7 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
             </CheckboxGroup>
           </ModalBody>
           <ModalFooter>
-            {/* <Button onClick={() => alert(selectedUserIdList)}> */}
-            <Button as={Link} href={`${leagueId}/matchLog?selectedUserList=${selectedUserIdList}`}>
+            <Button as={Link} href={`${leagueId}/matchLog?${userIdListQueryStrings}`}>
               Next
             </Button>
           </ModalFooter>

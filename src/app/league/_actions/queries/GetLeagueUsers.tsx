@@ -2,11 +2,11 @@
 
 import { prisma } from '@/infrastructures/prisma';
 
-export const getLeagueUsers = async (leagueId: number) => {
-  const users = prisma.user.findMany({
+export const getLeagueUserList = async (leagueId: number) => {
+  const userList = prisma.user.findMany({
     where: {
       leagueId,
     },
   });
-  return users;
+  return userList;
 };
