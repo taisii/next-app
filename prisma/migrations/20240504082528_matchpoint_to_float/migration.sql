@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "MatchUserResult" ALTER COLUMN "point" SET DATA TYPE DOUBLE PRECISION;

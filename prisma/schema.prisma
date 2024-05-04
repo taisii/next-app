@@ -44,5 +44,5 @@ model MatchUserResult {
   Match   Match? @relation(fields: [matchId], references: [id])
   matchId Int?
   rank    Int
-  point   Int
+  point   Float
 }
