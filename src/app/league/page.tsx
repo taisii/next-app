@@ -5,9 +5,8 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
+import { createLeague } from './_actions/mutations/CreateLeague';
 import { UserCard } from './_components/UserCard';
-
-// import { createLeague } from '@/league/actions/mutations/CreateLeague';
 
 const LeagueInitPage: NextPage = () => {
   const [nameList, setNameList] = useState<string[]>([]);
@@ -34,8 +33,7 @@ const LeagueInitPage: NextPage = () => {
 
   const handleFinalize = async () => {
     setIsFinalizedButtonLoading(true);
-    // const league = await createLeague(nameList);
-    const league = { id: 1 };
+    const league = await createLeague(nameList);
     router.push(`/league/${league.id}`);
   };
 
@@ -43,13 +41,7 @@ const LeagueInitPage: NextPage = () => {
     <VStack mt="3rem">
       <Flex direction={'column'} width="90%">
         <FormControl isInvalid={isNameEmptyLabelShown || isNameExistLabelShown} height="5rem">
-          <Input
-            size="lg"
-            placeholder="name"
-            focusBorderColor="yellow.500"
-            value={addingName}
-            onChange={handleOnChangeText}
-          />
+          <Input size="lg" placeholder="name" value={addingName} onChange={handleOnChangeText} />
           <NameFormHelperText
             isNameEmptyLabelShown={isNameEmptyLabelShown}
             isNameExistLabelShown={isNameExistLabelShown}
@@ -64,6 +56,7 @@ const LeagueInitPage: NextPage = () => {
         </Box>
       </Flex>
       <Button
+        isDisabled={nameList.length <= 0}
         position="fixed"
         width="90%"
         mb="2rem"

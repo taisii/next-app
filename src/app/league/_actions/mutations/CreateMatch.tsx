@@ -8,9 +8,10 @@ export type createMatchObject = {
   point: number;
 };
 
-export const createMatch = async (createMatchObjectList: createMatchObject[]) => {
+export const createMatch = async (leagueId: number, createMatchObjectList: createMatchObject[]) => {
   const match = await prisma.match.create({
     data: {
+      leagueId,
       matchUserResultList: {
         createMany: {
           data: createMatchObjectList,
