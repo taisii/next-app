@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { createMatch } from '../../_actions/mutations/CreateMatch';
-import { getLeagueUserList } from '../../_actions/queries/GetLeagueUsers';
+import { getUserListByLeagueId } from '../../_actions/queries/GetUserListByLeagueId';
 import { UserPointInput } from '../../_components/UserPointInput';
 
 export type MatchResult = {
@@ -27,7 +27,7 @@ const MatchLogPage = ({ params }: { params: { leagueId: string } }) => {
 
   useEffect(() => {
     const fetchSelectedUserList = async () => {
-      const ApiResponceUserList = await getLeagueUserList(leagueId);
+      const ApiResponceUserList = await getUserListByLeagueId(leagueId);
       setSelectedUserIdList(ApiResponceUserList.filter((user) => selectedUserIdList.includes(user.id)));
     };
 

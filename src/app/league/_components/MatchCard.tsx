@@ -12,7 +12,7 @@ type MatchCardProps = {
 export const MatchCard = ({ date, userNameList, matchList }: MatchCardProps) => {
   const dateDayjs = dayjs(date);
   return (
-    <Card width="90%" p="1rem">
+    <Card width="100%" mb="1rem" p="1rem">
       <Box as="span" flex={1} textAlign="left">
         {dateDayjs.format('M/D')}
       </Box>
