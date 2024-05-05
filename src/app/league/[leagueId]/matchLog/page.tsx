@@ -2,7 +2,7 @@
 
 import { Box, Button, VStack } from '@chakra-ui/react';
 import { User } from '@prisma/client';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { createMatch } from '../../_actions/mutations/CreateMatch';
@@ -20,6 +20,7 @@ const MatchLogPage = ({ params }: { params: { leagueId: string } }) => {
   const [selectedUserList, setSelectedUserIdList] = useState<User[]>([]);
   const [matchResultList, setMatchResultList] = useState<MatchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const selectedUserIdList = searchParams.getAll('selectedUserId').map(Number);
   const isInvalidSubmit = matchResultList.length !== selectedUserIdList.length;
@@ -40,13 +41,15 @@ const MatchLogPage = ({ params }: { params: { leagueId: string } }) => {
       rank: index + 1,
       ...matchResult,
     }));
-    const match = await createMatch(createMatchObjectList);
-    setIsLoading(false);
+    const match = await createMatch(leagueId, createMatchObjectList);
+    router.replace(`/league/${leagueId}`);
   };
 
   return (
     <VStack mt="3rem">
-      <Box>マッチを記録するためのページ</Box>
+      <Box fontSize="2rem" fontWeight="bold">
+        Record
+      </Box>
       {selectedUserList.map((user) => (
         <UserPointInput
           key={user.id}

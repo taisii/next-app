@@ -18,25 +18,34 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { User } from '@prisma/client';
+import { Match, MatchUserResult, User } from '@prisma/client';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { FaRankingStar } from 'react-icons/fa6';
 
 import { getLeagueUserList } from '../_actions/queries/GetLeagueUsers';
+import { getMatchListByLeagueId } from '../_actions/queries/GetMatchListByLeagueId';
+import { MatchCard } from '../_components/MatchCard';
 import { UserSelectCard } from '../_components/UserSelectCard';
+
+export type MatchWitchMatchUserResult = Match & { matchUserResultList: MatchUserResult[] };
 
 const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
   const leagueId = Number(params.leagueId);
   const [userList, setUserList] = useState<User[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedUserIdList, setSelectedUserIdList] = useState<number[]>([]);
+  const [matchList, setMatchList] = useState<MatchWitchMatchUserResult[]>([]);
+  const matchCardObjectList = matchListTomatchCardObjectList(matchList);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       const ApiResponceUserList = await getLeagueUserList(leagueId);
+      const ApiResponceMatchList = await getMatchListByLeagueId(leagueId);
       setUserList(ApiResponceUserList);
+      setMatchList(ApiResponceMatchList);
     };
-    fetchUserData();
+    fetchData();
   }, [leagueId]);
 
   const userIdListQueryStrings = selectedUserIdList
@@ -60,9 +69,14 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
           bottom="2rem"
           onClick={onOpen}
         />
-        {userList.map((user) => {
-          return <Box key={user.id}>{user.name}</Box>;
-        })}
+        {matchCardObjectList.map((matchCardObject, index) => (
+          <MatchCard
+            key={index}
+            userNameList={userIdListToUserNameList(matchCardObject.userIdList, userList)}
+            matchList={matchCardObject.matchList}
+            date={matchCardObject.date}
+          />
+        ))}
       </VStack>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -89,3 +103,42 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
 };
 
 export default LeaguePage;
+
+type MatchCardObject = {
+  date: Date;
+  userIdList: number[];
+  matchList: MatchWitchMatchUserResult[];
+};
+
+const matchListTomatchCardObjectList = (matchList: MatchWitchMatchUserResult[]) => {
+  const groupMap = new Map<string, MatchCardObject>();
+
+  for (const match of matchList) {
+    const date = dayjs(match.date).format('YYYY-MM-DD'); // 日付をフォーマット
+    const userIdList = match.matchUserResultList.map((matchUserResult) => matchUserResult.userId).sort();
+    const userNameList = userIdList.join('-'); // ユーザーIDをソートして結合
+    const key = `${date}_${userNameList}`; // 日付とユーザーIDリストを組み合わせたキー
+
+    if (!groupMap.has(key)) {
+      groupMap.set(key, {
+        date: match.date,
+        userIdList,
+        matchList: [],
+      });
+    }
+    groupMap.get(key)?.matchList.push(match);
+  }
+
+  return Array.from(groupMap.values());
+};
+
+const userIdListToUserNameList = (userIdList: number[], userList: User[]) => {
+  const userNameList: string[] = [];
+  for (const userId of userIdList) {
+    const user = userList.find((user) => user.id === userId);
+    if (user) {
+      userNameList.push(user.name);
+    }
+  }
+  return userNameList;
+};
