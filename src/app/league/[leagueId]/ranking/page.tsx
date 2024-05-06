@@ -1,7 +1,9 @@
 'use client';
 
-import { VStack, Text, Box } from '@chakra-ui/react';
+import { VStack, Text, Box, Icon, HStack, Flex, Spacer } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { AiOutlineUser } from 'react-icons/ai';
+import { PiCrownThin } from 'react-icons/pi';
 
 import { getUserListWithMatchResultByLeagueId } from '../../_actions/queries/GetUserListWithMatchResultByLeagueId';
 
@@ -22,15 +24,46 @@ const RankingPage = ({ params }: { params: { leagueId: string } }) => {
     };
     fetchData();
   }, []);
-
+  if (userRankingObjectList.length === 0) {
+    return (
+      <>
+        <Text fontSize="2rem" fontWeight="bold" textAlign="center" mt="3rem">
+          Ranking
+        </Text>
+        <VStack>
+          {userRankingObjectList.map((userRankingObject) => (
+            <Box key={userRankingObject.userId}>{userRankingObject.userName}</Box>
+          ))}
+        </VStack>
+      </>
+    );
+  }
+  const topUser = userRankingObjectList[0];
+  const otherUserList = userRankingObjectList.slice(1);
   return (
     <>
-      <Text fontSize="2rem" fontWeight="bold" textAlign="center" mt="3rem">
+      <Text fontSize="2rem" fontWeight="bold" textAlign="center" mt="3rem" mb="3rem">
         Ranking
       </Text>
       <VStack>
-        {userRankingObjectList.map((userRankingObject) => (
-          <Box key={userRankingObject.userId}>{userRankingObject.userName}</Box>
+        <HStack width="90%" borderWidth={1} borderRadius={40} p="1rem" borderColor="black">
+          <Icon as={AiOutlineUser} mr="2rem" boxSize="4rem" />
+          <Icon as={PiCrownThin} mr="2rem" boxSize="2rem" position="absolute" top={100} left={51} />
+          <VStack>
+            <Text fontSize="2xl">{topUser.userName}</Text>
+            <Text>{topUser.point}</Text>
+          </VStack>
+        </HStack>
+        {otherUserList.map((userRankingObject, index) => (
+          <Flex key={index} flexDir="row" width="90%" alignItems="center" mt="0.5rem">
+            <Box width="10%" fontSize="lg" ml="1rem">
+              {index + 2}
+            </Box>
+            <Icon as={AiOutlineUser} mr="2rem" boxSize="2rem" />
+            <Text>{userRankingObject.userName}</Text>
+            <Spacer />
+            <Text mr="1rem">{userRankingObject.point}</Text>
+          </Flex>
         ))}
       </VStack>
     </>

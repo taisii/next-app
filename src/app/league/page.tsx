@@ -5,11 +5,15 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
-import { createLeague } from './_actions/mutations/CreateLeague';
 import { UserCard } from './_components/UserCard';
 
+export type AddingUser = {
+  userName: string;
+  teamName: string;
+};
+
 const LeagueInitPage: NextPage = () => {
-  const [nameList, setNameList] = useState<string[]>([]);
+  const [userList, setUserList] = useState<AddingUser[]>([]);
   const [addingName, setAddingName] = useState('');
   const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
   const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
@@ -22,19 +26,19 @@ const LeagueInitPage: NextPage = () => {
 
   const handleClickAddButton = () => {
     const isNameEmpty = addingName === '';
-    const isNameExist = nameList.includes(addingName);
+    const isNameExist = userList.some((user) => user.userName === addingName);
     setIsNameEmptyLabelShown(isNameEmpty);
     setIsNameExistLabelShown(isNameExist);
     if (!isNameEmpty && !isNameExist) {
-      setNameList([...nameList, addingName]);
+      setUserList([...userList, { userName: addingName, teamName: addingName }]);
       setAddingName('');
     }
   };
 
   const handleFinalize = async () => {
     setIsFinalizedButtonLoading(true);
-    const league = await createLeague(nameList);
-    router.push(`/league/${league.id}`);
+    // const league = await createLeague(nameList);
+    // router.push(`/league/${league.id}`);
   };
 
   return (
@@ -50,13 +54,13 @@ const LeagueInitPage: NextPage = () => {
 
         <Button onClick={handleClickAddButton}>Add</Button>
         <Box mt="1rem">
-          {nameList.map((name, index) => (
-            <UserCard key={index} userName={name} nameList={nameList} setNameList={setNameList} />
+          {userList.map((user, index) => (
+            <UserCard key={index} addingUser={user} setUserList={setUserList} userList={userList} />
           ))}
         </Box>
       </Flex>
       <Button
-        isDisabled={nameList.length <= 0}
+        isDisabled={userList.length <= 0}
         position="fixed"
         width="90%"
         mb="2rem"

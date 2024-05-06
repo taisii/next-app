@@ -1,22 +1,25 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Box, Flex, Icon, IconButton, Spacer } from '@chakra-ui/react';
+import { Flex, Icon, Spacer, IconButton, Text } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 
+import { AddingUser } from '../page';
+
 type UserCardProps = {
-  userName: string;
-  nameList: string[];
-  setNameList: Dispatch<SetStateAction<string[]>>;
+  addingUser: AddingUser;
+  userList: AddingUser[];
+  setUserList: Dispatch<SetStateAction<AddingUser[]>>;
 };
 
-export const UserCard = ({ userName, nameList, setNameList }: UserCardProps) => {
+export const UserCard = ({ addingUser, userList, setUserList }: UserCardProps) => {
   const handleOnDeleteButton = () => {
-    setNameList(nameList.filter((name) => name !== userName));
+    setUserList(userList.filter((user) => user.userName !== addingUser.userName));
   };
+
   return (
     <Flex flexDir="row" alignItems="center">
-      <Icon as={AiOutlineUser} mr="2rem" boxSize="1.7rem" />
-      <Box>{userName}</Box>
+      <Icon as={AiOutlineUser} mr="2rem" boxSize="2rem" />
+      <Text>{addingUser.userName}</Text>
       <Spacer />
       <IconButton
         aria-label="user"
