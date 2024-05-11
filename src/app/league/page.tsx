@@ -24,7 +24,7 @@ const LeagueInitPage: NextPage = () => {
   const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
   const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
   const [isFinalizedButtonLoading, setIsFinalizedButtonLoading] = useState(false);
-  const [addingTeamList, setAddingTeamList] = useState<AddingTeam[]>([]);
+  const [teamList, setTeamList] = useState<AddingTeam[]>([]);
   const router = useRouter();
 
   const handleOnChangeText = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +61,7 @@ const LeagueInitPage: NextPage = () => {
 
         <Button onClick={handleClickAddButton}>Add</Button>
         <Box mt="2rem" width="100%">
-          <CreateTeamButton addingTeamList={addingTeamList} setAddingTeamList={setAddingTeamList} />
+          <CreateTeamButton teamList={teamList} setTeamList={setTeamList} />
         </Box>
         <Box mt="1rem">
           {userList.map((user, index) => (

@@ -1,25 +1,26 @@
 import { DeleteIcon } from '@chakra-ui/icons';
 import {
+  Box,
+  Button,
   Flex,
   Icon,
-  Spacer,
   IconButton,
-  Text,
+  Img,
   Modal,
-  useDisclosure,
-  Button,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Img,
-  Box,
+  Spacer,
+  Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 
+import { teamIconUriList } from '../_constants/Constants';
 import { AddingUser } from '../page';
 
 type UserCardProps = {
@@ -71,15 +72,3 @@ export const UserCard = ({ addingUser, userList, setUserList }: UserCardProps) =
     </>
   );
 };
-
-export const teamIconUriList = [
-  'images/DRIVENS.png',
-  'images/EX.svg',
-  'images/sakuraknights.png',
-  'images/KONAMI.svg',
-  'images/ABEMAS.svg',
-  'images/phoenix.svg',
-  'images/RAIDEN.svg',
-  'images/BEAST.png',
-  'images/U-NEXT-PIRATES.svg',
-];
