@@ -5,11 +5,17 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
+import { CreateTeamButton } from './_components/CreateTeamButton';
 import { UserCard } from './_components/UserCard';
 
 export type AddingUser = {
   userName: string;
   teamName: string;
+};
+
+export type AddingTeam = {
+  name: string;
+  iconUriIndex: number;
 };
 
 const LeagueInitPage: NextPage = () => {
@@ -18,6 +24,7 @@ const LeagueInitPage: NextPage = () => {
   const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
   const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
   const [isFinalizedButtonLoading, setIsFinalizedButtonLoading] = useState(false);
+  const [addingTeamList, setAddingTeamList] = useState<AddingTeam[]>([]);
   const router = useRouter();
 
   const handleOnChangeText = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +60,9 @@ const LeagueInitPage: NextPage = () => {
         </FormControl>
 
         <Button onClick={handleClickAddButton}>Add</Button>
+        <Box mt="2rem" width="100%">
+          <CreateTeamButton addingTeamList={addingTeamList} setAddingTeamList={setAddingTeamList} />
+        </Box>
         <Box mt="1rem">
           {userList.map((user, index) => (
             <UserCard key={index} addingUser={user} setUserList={setUserList} userList={userList} />
