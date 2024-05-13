@@ -10,7 +10,7 @@ import { UserCard } from './_components/UserCard';
 
 export type AddingUser = {
   userName: string;
-  teamName: string;
+  teamIndex?: number;
 };
 
 export type AddingTeam = {
@@ -37,7 +37,7 @@ const LeagueInitPage: NextPage = () => {
     setIsNameEmptyLabelShown(isNameEmpty);
     setIsNameExistLabelShown(isNameExist);
     if (!isNameEmpty && !isNameExist) {
-      setUserList([...userList, { userName: addingName, teamName: addingName }]);
+      setUserList([...userList, { userName: addingName }]);
       setAddingName('');
     }
   };
@@ -65,7 +65,7 @@ const LeagueInitPage: NextPage = () => {
         </Box>
         <Box mt="1rem">
           {userList.map((user, index) => (
-            <UserCard key={index} addingUser={user} setUserList={setUserList} userList={userList} />
+            <UserCard key={index} addingUser={user} setUserList={setUserList} userList={userList} teamList={teamList} />
           ))}
         </Box>
       </Flex>

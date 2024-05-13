@@ -73,7 +73,9 @@ export const CreateTeamModal = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button onClick={handleClickDecideButton}>決定</Button>
+          <Button variant="outline" onClick={handleClickDecideButton}>
+            決定
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

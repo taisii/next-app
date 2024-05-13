@@ -17,7 +17,6 @@ export const CreateTeamButton = ({ teamList, setTeamList }: CreateTeamButtonProp
   const { isOpen: isCreateTeamOpen, onOpen: onCreateTeamOpen, onClose: onCreateTeamClose } = useDisclosure();
   const { isOpen: isSelectIconOpen, onOpen: onSelectIconOpen, onClose: onSelectIconClose } = useDisclosure();
   const [addingTeam, setAddingTeam] = useState<AddingTeam>({ iconUriIndex: availableIndexList[0], name: '' });
-  const [selectIndex, setSelectIndex] = useState(availableIndexList[0]);
 
   return (
     <>

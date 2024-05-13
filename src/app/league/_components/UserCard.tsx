@@ -1,35 +1,19 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  IconButton,
-  Img,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Spacer,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Flex, Icon, IconButton, Spacer, Text, useDisclosure } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 
-import { teamIconUriList } from '../_constants/Constants';
-import { AddingUser } from '../page';
+import { SelectTeamModal } from './SelectTeamModal';
+import { AddingTeam, AddingUser } from '../page';
 
 type UserCardProps = {
   addingUser: AddingUser;
   userList: AddingUser[];
   setUserList: Dispatch<SetStateAction<AddingUser[]>>;
+  teamList: AddingTeam[];
 };
 
-export const UserCard = ({ addingUser, userList, setUserList }: UserCardProps) => {
+export const UserCard = ({ addingUser, userList, setUserList, teamList }: UserCardProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleOnDeleteButton = () => {
@@ -51,24 +35,14 @@ export const UserCard = ({ addingUser, userList, setUserList }: UserCardProps) =
         />
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent width="90%">
-          <ModalHeader fontWeight="bold">Select Team</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box overflowY="scroll" height="20rem">
-              {teamIconUriList.map((teamIconUri) => (
-                <Img src={teamIconUri} key={teamIconUri} boxSize="4rem" />
-              ))}
-            </Box>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button variant="outline">決定</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <SelectTeamModal
+        isOpen={isOpen}
+        onClose={onClose}
+        teamList={teamList}
+        userList={userList}
+        setUserList={setUserList}
+        addingUser={addingUser}
+      />
     </>
   );
 };

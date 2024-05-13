@@ -106,7 +106,9 @@ export const SelectIconModal = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button onClick={handleOnClickIconDecideButton}>決定</Button>
+          <Button variant="outline" onClick={handleOnClickIconDecideButton}>
+            決定
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
