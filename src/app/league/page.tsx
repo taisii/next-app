@@ -61,7 +61,7 @@ const LeagueInitPage: NextPage = () => {
 
         <Button onClick={handleClickAddButton}>Add</Button>
         <Box mt="2rem" width="100%">
-          <CreateTeamButton teamList={teamList} setTeamList={setTeamList} />
+          <CreateTeamButton teamList={teamList} setTeamList={setTeamList} key={teamList.length} />
         </Box>
         <Box mt="1rem">
           {userList.map((user, index) => (

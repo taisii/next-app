@@ -1,21 +1,9 @@
-import {
-  Box,
-  Button,
-  Img,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { Button, useDisclosure } from '@chakra-ui/react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 import { teamIconUriList } from '../_constants/Constants';
 import { AddingTeam } from '../page';
+import { CreateTeamModal } from './CreateTeamModal';
 import { SelectIconModal } from './SeclectIconModal';
 
 type CreateTeamButtonProps = {
@@ -31,51 +19,22 @@ export const CreateTeamButton = ({ teamList, setTeamList }: CreateTeamButtonProp
   const [addingTeam, setAddingTeam] = useState<AddingTeam>({ iconUriIndex: availableIndexList[0], name: '' });
   const [selectIndex, setSelectIndex] = useState(availableIndexList[0]);
 
-  const handleOnClickIcon = () => {
-    onCreateTeamClose();
-    onSelectIconOpen();
-  };
-
-  const handleOnChengeText = (e: ChangeEvent<HTMLInputElement>) => {
-    setAddingTeam({ iconUriIndex: addingTeam.iconUriIndex, name: e.target.value });
-  };
-
-  const handleClickDecideButton = () => {
-    if (addingTeam) {
-      setTeamList([...teamList, addingTeam]);
-    }
-    onCreateTeamClose();
-  };
-
   return (
     <>
       <Button variant="outline" width="100%" onClick={onCreateTeamOpen}>
         Create Team
       </Button>
 
-      <Modal isOpen={isCreateTeamOpen} onClose={onCreateTeamClose}>
-        <ModalOverlay />
-        <ModalContent width="90%">
-          <ModalHeader fontWeight="bold">Create Team</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box onClick={handleOnClickIcon} display="flex" justifyContent="center" pb="3rem">
-              <Img
-                src={teamIconUriList[addingTeam.iconUriIndex]}
-                borderWidth={1}
-                borderColor="black"
-                width="100%"
-                objectFit="cover"
-              />
-            </Box>
-            <Input placeholder="Team Name" value={addingTeam.name} onChange={handleOnChengeText} />
-          </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={handleClickDecideButton}>決定</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <CreateTeamModal
+        isOpen={isCreateTeamOpen}
+        onClose={onCreateTeamClose}
+        onSelectIconOpen={onSelectIconOpen}
+        onCreateTeamClose={onCreateTeamClose}
+        teamList={teamList}
+        addingTeam={addingTeam}
+        setAddingTeam={setAddingTeam}
+        setTeamList={setTeamList}
+      />
 
       <SelectIconModal
         isOpen={isSelectIconOpen}

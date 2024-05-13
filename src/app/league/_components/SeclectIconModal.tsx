@@ -112,3 +112,13 @@ export const SelectIconModal = ({
     </Modal>
   );
 };
+
+const teamListToavailableIndexList = (teamList: AddingTeam[]) => {
+  // 全インデックスの範囲を定義
+  const totalIndexList = Array.from({ length: teamIconUriList.length }, (_, index) => index);
+
+  // 使用されていないインデックスのリストを計算
+  const availableIndexList = totalIndexList.filter((index) => !teamList.some((team) => team.iconUriIndex === index));
+
+  return availableIndexList;
+};
