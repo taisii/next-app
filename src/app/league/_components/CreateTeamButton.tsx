@@ -1,10 +1,10 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-import { teamIconUriList } from '../_constants/Constants';
-import { AddingTeam } from '../page';
 import { CreateTeamModal } from './CreateTeamModal';
 import { SelectIconModal } from './SeclectIconModal';
+import { teamIconUriList } from '../_constants/Constants';
+import { AddingTeam } from '../page';
 
 type CreateTeamButtonProps = {
   teamList: AddingTeam[];
