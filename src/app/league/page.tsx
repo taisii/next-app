@@ -1,15 +1,21 @@
 'use client';
 
-import { Box, Button, Flex, FormControl, FormErrorMessage, Input, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormErrorMessage, Input, Spacer } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
+import { CreateTeamButton } from './_components/CreateTeamButton';
 import { UserCard } from './_components/UserCard';
 
 export type AddingUser = {
   userName: string;
-  teamName: string;
+  teamIndex?: number;
+};
+
+export type AddingTeam = {
+  name: string;
+  iconUriIndex: number;
 };
 
 const LeagueInitPage: NextPage = () => {
@@ -18,6 +24,7 @@ const LeagueInitPage: NextPage = () => {
   const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
   const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
   const [isFinalizedButtonLoading, setIsFinalizedButtonLoading] = useState(false);
+  const [teamList, setTeamList] = useState<AddingTeam[]>([]);
   const router = useRouter();
 
   const handleOnChangeText = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +37,7 @@ const LeagueInitPage: NextPage = () => {
     setIsNameEmptyLabelShown(isNameEmpty);
     setIsNameExistLabelShown(isNameExist);
     if (!isNameEmpty && !isNameExist) {
-      setUserList([...userList, { userName: addingName, teamName: addingName }]);
+      setUserList([...userList, { userName: addingName }]);
       setAddingName('');
     }
   };
@@ -42,8 +49,8 @@ const LeagueInitPage: NextPage = () => {
   };
 
   return (
-    <VStack mt="3rem">
-      <Flex direction={'column'} width="90%">
+    <Flex pt="3rem" direction="column" alignItems="center" flex={1} minHeight="100vh">
+      <Box width="90%">
         <FormControl isInvalid={isNameEmptyLabelShown || isNameExistLabelShown} height="5rem">
           <Input size="lg" placeholder="name" value={addingName} onChange={handleOnChangeText} />
           <NameFormHelperText
@@ -52,25 +59,30 @@ const LeagueInitPage: NextPage = () => {
           />
         </FormControl>
 
-        <Button onClick={handleClickAddButton}>Add</Button>
-        <Box mt="1rem">
+        <Button onClick={handleClickAddButton} width="100%">
+          Add
+        </Button>
+        <Box mt="2rem" width="100%">
+          <CreateTeamButton teamList={teamList} setTeamList={setTeamList} key={teamList.length} />
+        </Box>
+        <Box mt="1rem" overflowY="scroll">
           {userList.map((user, index) => (
-            <UserCard key={index} addingUser={user} setUserList={setUserList} userList={userList} />
+            <UserCard key={index} addingUser={user} setUserList={setUserList} userList={userList} teamList={teamList} />
           ))}
         </Box>
-      </Flex>
+      </Box>
+      <Spacer />
       <Button
         isDisabled={userList.length <= 0}
-        position="fixed"
         width="90%"
+        mt="2rem"
         mb="2rem"
-        bottom={0}
         onClick={handleFinalize}
         isLoading={isFinalizedButtonLoading}
       >
         Finalise
       </Button>
-    </VStack>
+    </Flex>
   );
 };
 

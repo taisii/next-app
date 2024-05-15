@@ -16,10 +16,11 @@ model League {
 }
 
 model Team {
-  id         Int    @id @default(autoincrement())
-  League     League @relation(fields: [leagueId], references: [id])
-  leagueId   Int
-  memberList User[]
+  id           Int    @id @default(autoincrement())
+  League       League @relation(fields: [leagueId], references: [id])
+  leagueId     Int
+  iconUriIndex Int
+  memberList   User[]
 }
 
 model User {
