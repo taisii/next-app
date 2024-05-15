@@ -1,9 +1,10 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Flex, Icon, IconButton, Spacer, Text, useDisclosure } from '@chakra-ui/react';
+import { Avatar, Flex, Icon, IconButton, Img, Spacer, Text, useDisclosure } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 
 import { SelectTeamModal } from './SelectTeamModal';
+import { teamIconUriList } from '../_constants/Constants';
 import { AddingTeam, AddingUser } from '../page';
 
 type UserCardProps = {
@@ -22,9 +23,23 @@ export const UserCard = ({ addingUser, userList, setUserList, teamList }: UserCa
 
   return (
     <>
-      <Flex flexDir="row" alignItems="center">
-        <Icon as={AiOutlineUser} mr="2rem" boxSize="2rem" onClick={onOpen} />
-        <Text>{addingUser.userName}</Text>
+      <Flex flexDir="row" alignItems="center" pt={2}>
+        {addingUser.teamIndex !== undefined ? (
+          <Avatar
+            icon={<Img src={teamIconUriList[teamList[addingUser.teamIndex].iconUriIndex]} boxSize="3rem" />}
+            onClick={onOpen}
+            objectFit="contain"
+            bgColor="transparent"
+          />
+        ) : (
+          <Avatar
+            icon={<Icon as={AiOutlineUser} boxSize="2rem" color="black" />}
+            bgColor="transparent"
+            onClick={onOpen}
+          />
+        )}
+
+        <Text ml={5}>{addingUser.userName}</Text>
         <Spacer />
         <IconButton
           aria-label="user"

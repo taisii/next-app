@@ -36,6 +36,10 @@ export const SelectIconModal = ({
   addingTeam,
   setAddingTeam,
 }: SelectIconModalProps) => {
+  const handleOnClose = () => {
+    setSelectedIndexState(selectedIndex);
+    onClose();
+  };
   const handleOnClickIconDecideButton = () => {
     setAddingTeam({ name: addingTeam.name, iconUriIndex: selectedIndexState });
     onClose();
@@ -44,7 +48,7 @@ export const SelectIconModal = ({
   const [selectedIndexState, setSelectedIndexState] = useState(selectedIndex);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent width="90%">
         <ModalHeader fontWeight="bold">Select Icon</ModalHeader>

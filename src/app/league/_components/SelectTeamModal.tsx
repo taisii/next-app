@@ -35,14 +35,27 @@ export const SelectTeamModal = ({
 }: SelectTeamModalProps) => {
   const [teamIndex, setTeamIndex] = useState(addingUser.teamIndex);
 
+  const handleOnClose = () => {
+    setTeamIndex(addingUser.teamIndex);
+    onClose();
+  };
+
   const handleOnClickDecideButton = () => {
-    const otherUserList = userList.filter((user) => user.userName !== addingUser.userName);
-    setUserList([...otherUserList, { userName: addingUser.userName, teamIndex }]);
+    const newUserList = userList.map((user) => {
+      if (user.userName === addingUser.userName) {
+        /* 現在選択中のUserの場合は情報を変更 */
+        return { userName: addingUser.userName, teamIndex };
+      } else {
+        /* それ以外の場合はそのまま */
+        return user;
+      }
+    });
+    setUserList(newUserList);
     onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent width="90%">
         <ModalHeader fontWeight="bold">Select Team</ModalHeader>

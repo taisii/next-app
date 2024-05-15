@@ -66,7 +66,7 @@ export const CreateTeamModal = ({
               borderWidth={1}
               borderColor="black"
               width="100%"
-              objectFit="cover"
+              objectFit="contain"
             />
           </Box>
           <Input placeholder="Team Name" value={addingTeam.name} onChange={handleOnChengeText} />
