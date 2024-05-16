@@ -24,9 +24,9 @@ export const UserCard = ({ addingUser, userList, setUserList, teamList }: UserCa
   return (
     <>
       <Flex flexDir="row" alignItems="center" pt={2}>
-        {addingUser.teamIndex !== undefined ? (
+        {addingUser.teamName !== undefined ? (
           <Avatar
-            icon={<Img src={teamIconUriList[teamList[addingUser.teamIndex].iconUriIndex]} boxSize="3rem" />}
+            icon={<Img src={teamNameToTeamIconUri(addingUser.teamName, teamList)} boxSize="3rem" />}
             onClick={onOpen}
             objectFit="contain"
             bgColor="transparent"
@@ -60,4 +60,13 @@ export const UserCard = ({ addingUser, userList, setUserList, teamList }: UserCa
       />
     </>
   );
+};
+
+const teamNameToTeamIconUri = (teamName: string, teamList: AddingTeam[]) => {
+  const team = teamList.find((team) => team.name === teamName);
+  if (team) {
+    return teamIconUriList[team.iconUriIndex];
+  } else {
+    return undefined;
+  }
 };

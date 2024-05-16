@@ -5,12 +5,13 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
+import { createLeague } from './_actions/mutations/CreateLeague';
 import { CreateTeamButton } from './_components/CreateTeamButton';
 import { UserCard } from './_components/UserCard';
 
 export type AddingUser = {
   userName: string;
-  teamIndex?: number;
+  teamName?: string;
 };
 
 export type AddingTeam = {
@@ -44,8 +45,8 @@ const LeagueInitPage: NextPage = () => {
 
   const handleFinalize = async () => {
     setIsFinalizedButtonLoading(true);
-    // const league = await createLeague(nameList);
-    // router.push(`/league/${league.id}`);
+    const { league } = await createLeague(teamList, userList);
+    router.push(`/league/${league.id}`);
   };
 
   return (
@@ -86,7 +87,7 @@ const LeagueInitPage: NextPage = () => {
   );
 };
 
-const NameFormHelperText = ({
+export const NameFormHelperText = ({
   isNameEmptyLabelShown,
   isNameExistLabelShown,
 }: {
