@@ -1,9 +1,7 @@
 import {
   Box,
   Button,
-  FormControl,
   Img,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,8 +12,9 @@ import {
 } from '@chakra-ui/react';
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
+import { NameInput } from './NameInput';
 import { teamIconUriList } from '../_constants/Constants';
-import { AddingTeam, NameFormHelperText } from '../page';
+import { AddingTeam } from '../page';
 
 type CreateTeamModalProps = {
   isOpen: boolean;
@@ -84,13 +83,12 @@ export const CreateTeamModal = ({
               objectFit="contain"
             />
           </Box>
-          <FormControl isInvalid={isNameEmptyLabelShown || isNameExistLabelShown} height="3rem">
-            <Input placeholder="Team Name" value={addingTeam.name} onChange={handleOnChengeText} />
-            <NameFormHelperText
-              isNameEmptyLabelShown={isNameEmptyLabelShown}
-              isNameExistLabelShown={isNameExistLabelShown}
-            />
-          </FormControl>
+          <NameInput
+            isNameEmptyLabelShown={isNameEmptyLabelShown}
+            isNameExistLabelShown={isNameExistLabelShown}
+            value={addingTeam.name}
+            onInputChange={handleOnChengeText}
+          />
         </ModalBody>
 
         <ModalFooter>
