@@ -16,11 +16,13 @@ model League {
 }
 
 model Team {
-  id           Int    @id @default(autoincrement())
   League       League @relation(fields: [leagueId], references: [id])
   leagueId     Int
   iconUriIndex Int
+  name         String
   memberList   User[]
+
+  @@unique([leagueId, name])
 }
 
 model User {
@@ -28,9 +30,12 @@ model User {
   name                String
   League              League            @relation(fields: [leagueId], references: [id])
   leagueId            Int
-  Team                Team?             @relation(fields: [teamId], references: [id])
-  teamId              Int?
   matchUserResultList MatchUserResult[]
+  Team                Team?             @relation(fields: [teamLeagueId, teamName], references: [leagueId, name])
+  teamLeagueId        Int?
+  teamName            String?
+
+  @@unique([leagueId, name])
 }
 
 model Match {

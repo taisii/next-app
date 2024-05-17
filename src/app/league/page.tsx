@@ -1,16 +1,18 @@
 'use client';
 
-import { Box, Button, Flex, FormControl, FormErrorMessage, Input, Spacer } from '@chakra-ui/react';
+import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
+import { createLeague } from './_actions/mutations/CreateLeague';
 import { CreateTeamButton } from './_components/CreateTeamButton';
+import { NameInput } from './_components/NameInput';
 import { UserCard } from './_components/UserCard';
 
 export type AddingUser = {
   userName: string;
-  teamIndex?: number;
+  teamName?: string;
 };
 
 export type AddingTeam = {
@@ -44,20 +46,19 @@ const LeagueInitPage: NextPage = () => {
 
   const handleFinalize = async () => {
     setIsFinalizedButtonLoading(true);
-    // const league = await createLeague(nameList);
-    // router.push(`/league/${league.id}`);
+    const { league } = await createLeague(teamList, userList);
+    router.push(`/league/${league.id}`);
   };
 
   return (
     <Flex pt="3rem" direction="column" alignItems="center" flex={1} minHeight="100vh">
       <Box width="90%">
-        <FormControl isInvalid={isNameEmptyLabelShown || isNameExistLabelShown} height="5rem">
-          <Input size="lg" placeholder="name" value={addingName} onChange={handleOnChangeText} />
-          <NameFormHelperText
-            isNameEmptyLabelShown={isNameEmptyLabelShown}
-            isNameExistLabelShown={isNameExistLabelShown}
-          />
-        </FormControl>
+        <NameInput
+          value={addingName}
+          onInputChange={handleOnChangeText}
+          isNameEmptyLabelShown={isNameEmptyLabelShown}
+          isNameExistLabelShown={isNameExistLabelShown}
+        />
 
         <Button onClick={handleClickAddButton} width="100%">
           Add
@@ -84,20 +85,6 @@ const LeagueInitPage: NextPage = () => {
       </Button>
     </Flex>
   );
-};
-
-const NameFormHelperText = ({
-  isNameEmptyLabelShown,
-  isNameExistLabelShown,
-}: {
-  isNameEmptyLabelShown: boolean;
-  isNameExistLabelShown: boolean;
-}) => {
-  if (isNameEmptyLabelShown) {
-    return <FormErrorMessage>名前を入力してください</FormErrorMessage>;
-  } else if (isNameExistLabelShown) {
-    return <FormErrorMessage>同じ名前は使えません</FormErrorMessage>;
-  }
 };
 
 export default LeagueInitPage;

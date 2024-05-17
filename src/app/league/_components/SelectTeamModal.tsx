@@ -33,10 +33,10 @@ export const SelectTeamModal = ({
   setUserList,
   addingUser,
 }: SelectTeamModalProps) => {
-  const [teamIndex, setTeamIndex] = useState(addingUser.teamIndex);
+  const [selectedTeamName, setSelectedTeamName] = useState(addingUser.teamName);
 
   const handleOnClose = () => {
-    setTeamIndex(addingUser.teamIndex);
+    setSelectedTeamName(addingUser.teamName);
     onClose();
   };
 
@@ -44,7 +44,7 @@ export const SelectTeamModal = ({
     const newUserList = userList.map((user) => {
       if (user.userName === addingUser.userName) {
         /* 現在選択中のUserの場合は情報を変更 */
-        return { userName: addingUser.userName, teamIndex };
+        return { userName: addingUser.userName, teamName: selectedTeamName };
       } else {
         /* それ以外の場合はそのまま */
         return user;
@@ -63,7 +63,7 @@ export const SelectTeamModal = ({
         <ModalBody>
           <Box overflowY="scroll" height="20rem">
             {teamList.map((team, index) => {
-              if (index === teamIndex) {
+              if (team.name === selectedTeamName) {
                 return (
                   <Flex
                     key={team.iconUriIndex}
@@ -75,7 +75,7 @@ export const SelectTeamModal = ({
                     pb={1}
                     pr={3}
                     pl={3}
-                    onClick={() => setTeamIndex(index)}
+                    onClick={() => setSelectedTeamName(team.name)}
                   >
                     <Img
                       src={teamIconUriList[team.iconUriIndex]}
@@ -101,7 +101,7 @@ export const SelectTeamModal = ({
                     pb={1}
                     pr={3}
                     pl={3}
-                    onClick={() => setTeamIndex(index)}
+                    onClick={() => setSelectedTeamName(team.name)}
                   >
                     <Img
                       src={teamIconUriList[team.iconUriIndex]}

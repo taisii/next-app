@@ -32,7 +32,7 @@ const MatchLogPage = ({ params }: { params: { leagueId: string } }) => {
     };
 
     fetchSelectedUserList();
-  }, []);
+  }, [leagueId, selectedUserIdList]);
 
   const handleClickDecisionButton = async () => {
     setIsLoading(true);

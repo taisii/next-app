@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Img,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,8 +10,9 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
+import { NameInput } from './NameInput';
 import { teamIconUriList } from '../_constants/Constants';
 import { AddingTeam } from '../page';
 
@@ -37,6 +37,16 @@ export const CreateTeamModal = ({
   teamList,
   setTeamList,
 }: CreateTeamModalProps) => {
+  const [isNameEmptyLabelShown, setIsNameEmptyLabelShown] = useState(false);
+  const [isNameExistLabelShown, setIsNameExistLabelShown] = useState(false);
+
+  const handleOnClose = () => {
+    setIsNameEmptyLabelShown(false);
+    setIsNameExistLabelShown(false);
+    setAddingTeam({ iconUriIndex: addingTeam.iconUriIndex, name: '' });
+    onClose();
+  };
+
   const handleOnClickIcon = () => {
     onCreateTeamClose();
     onSelectIconOpen();
@@ -47,14 +57,18 @@ export const CreateTeamModal = ({
   };
 
   const handleClickDecideButton = () => {
-    if (addingTeam) {
+    const isNameEmpty = addingTeam.name === '';
+    const isNameExist = teamList.some((team) => team.name === addingTeam.name);
+    setIsNameEmptyLabelShown(isNameEmpty);
+    setIsNameExistLabelShown(isNameExist);
+    if (!isNameEmpty && !isNameExist) {
       setTeamList([...teamList, addingTeam]);
+      onCreateTeamClose();
     }
-    onCreateTeamClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent width="90%">
         <ModalHeader fontWeight="bold">Create Team</ModalHeader>
@@ -69,7 +83,12 @@ export const CreateTeamModal = ({
               objectFit="contain"
             />
           </Box>
-          <Input placeholder="Team Name" value={addingTeam.name} onChange={handleOnChengeText} />
+          <NameInput
+            isNameEmptyLabelShown={isNameEmptyLabelShown}
+            isNameExistLabelShown={isNameExistLabelShown}
+            value={addingTeam.name}
+            onInputChange={handleOnChengeText}
+          />
         </ModalBody>
 
         <ModalFooter>
