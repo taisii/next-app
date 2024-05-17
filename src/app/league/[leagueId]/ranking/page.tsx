@@ -5,7 +5,10 @@ import { useEffect, useState } from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 import { PiCrownThin } from 'react-icons/pi';
 
-import { getUserListWithMatchResultByLeagueId } from '../../_actions/queries/GetUserListWithMatchResultByLeagueId';
+import {
+  GetUserListWithMatchResultByLeagueIdResponce,
+  getUserListWithMatchResultByLeagueId,
+} from '../../_actions/queries/GetUserListWithMatchResultByLeagueId';
 
 type UserRankingObject = {
   userName: string;
@@ -23,7 +26,8 @@ const RankingPage = ({ params }: { params: { leagueId: string } }) => {
       setUserRankingObjectList(apiResponceToUserRankingObjectList(apiResponceUserList));
     };
     fetchData();
-  }, []);
+  }, [leagueId]);
+
   if (userRankingObjectList.length === 0) {
     return (
       <>
@@ -72,22 +76,7 @@ const RankingPage = ({ params }: { params: { leagueId: string } }) => {
 
 export default RankingPage;
 
-const apiResponceToUserRankingObjectList = (
-  apiResponce: ({
-    matchUserResultList: {
-      id: number;
-      userId: number;
-      matchId: number | null;
-      rank: number;
-      point: number;
-    }[];
-  } & {
-    id: number;
-    name: string;
-    leagueId: number;
-    teamId: number | null;
-  })[]
-) => {
+const apiResponceToUserRankingObjectList = (apiResponce: GetUserListWithMatchResultByLeagueIdResponce) => {
   const rankingObjectList: {
     point: number;
     userId: number;

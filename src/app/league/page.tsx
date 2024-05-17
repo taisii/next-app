@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Flex, FormControl, FormErrorMessage, Input, Spacer } from '@chakra-ui/react';
+import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
