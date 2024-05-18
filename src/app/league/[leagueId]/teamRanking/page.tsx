@@ -3,10 +3,7 @@
 import { Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import {
-  GetUserListWithMatchResultByLeagueIdResponce,
-  getUserListByLeagueId,
-} from '../../_actions/queries/GetUserListWithMatchResultByLeagueId';
+import { getTeamListByLeagueId, GetTeamListLeagueIdResponce } from '../../_actions/queries/GetTeamListByLeagueId';
 import { RankingDisplay, RankingObject } from '../../_components/RankingDisplay';
 
 const RankingPage = ({ params }: { params: { leagueId: string } }) => {
@@ -15,8 +12,8 @@ const RankingPage = ({ params }: { params: { leagueId: string } }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiResponceUserList = await getUserListByLeagueId(leagueId);
-      setRankingObjectList(apiResponceToRankingObjectList(apiResponceUserList));
+      const apiResponceTeamList = await getTeamListByLeagueId(leagueId);
+      setRankingObjectList(apiResponceToRankingObjectList(apiResponceTeamList));
     };
     fetchData();
   }, [leagueId]);
@@ -33,15 +30,17 @@ const RankingPage = ({ params }: { params: { leagueId: string } }) => {
 
 export default RankingPage;
 
-const apiResponceToRankingObjectList = (apiResponce: GetUserListWithMatchResultByLeagueIdResponce) => {
+const apiResponceToRankingObjectList = (apiResponce: GetTeamListLeagueIdResponce[]) => {
   const rankingObjectList: RankingObject[] = [];
-  for (const user of apiResponce) {
-    const { Team, matchUserResultList, name } = user;
+  for (const team of apiResponce) {
+    const { memberList, iconUriIndex, name } = team;
     let point = 0;
-    for (const matchUserResult of matchUserResultList) {
-      point += matchUserResult.point;
+    for (const member of memberList) {
+      for (const matchUserResult of member.matchUserResultList) {
+        point += matchUserResult.point;
+      }
     }
-    rankingObjectList.push({ iconUriIndex: Team?.iconUriIndex, name, point });
+    rankingObjectList.push({ iconUriIndex, name, point });
   }
   return rankingObjectList;
 };
