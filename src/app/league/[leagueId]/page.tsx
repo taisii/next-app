@@ -5,14 +5,7 @@ import {
   Box,
   Button,
   CheckboxGroup,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   HStack,
-  Icon,
   IconButton,
   Link,
   Modal,
@@ -26,13 +19,13 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Match, MatchUserResult, User } from '@prisma/client';
+import { Match, MatchUserResult, Team, User } from '@prisma/client';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { GoTrophy } from 'react-icons/go';
 
 import { getMatchListByLeagueId } from '../_actions/queries/GetMatchListByLeagueId';
-import { getUserListByLeagueId } from '../_actions/queries/GetUserListByLeagueId';
+import { GetTeamAndUserByLeagueId } from '../_actions/queries/GetTeamAndUserByLeagueId';
+import { HomeDrawer } from '../_components/HomeDrawer';
 import { MatchCard } from '../_components/MatchCard';
 import { UserSelectCard } from '../_components/UserSelectCard';
 
@@ -41,6 +34,7 @@ export type MatchWitchMatchUserResult = Match & { matchUserResultList: MatchUser
 const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
   const leagueId = Number(params.leagueId);
   const [userList, setUserList] = useState<User[]>([]);
+  const [teamList, setTeamList] = useState<Team[]>([]);
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
   const [selectedUserIdList, setSelectedUserIdList] = useState<number[]>([]);
@@ -49,9 +43,10 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const ApiResponceUserList = await getUserListByLeagueId(leagueId);
+      const { userList: ApiResponceUserList, teamList: ApiResponceTeamList } = await GetTeamAndUserByLeagueId(leagueId);
       const ApiResponceMatchList = await getMatchListByLeagueId(leagueId);
       setUserList(ApiResponceUserList);
+      setTeamList(ApiResponceTeamList);
       setMatchList(ApiResponceMatchList);
     };
     fetchData();
@@ -63,31 +58,13 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
 
   return (
     <>
-      <Drawer isOpen={isDrawerOpen} placement="left" onClose={onDrawerClose}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Menu</DrawerHeader>
-
-          <DrawerBody>
-            <Button
-              width="100%"
-              leftIcon={<Icon as={GoTrophy} boxSize="1.5rem" />}
-              mb="3rem"
-              as={Link}
-              href={`${leagueId}/ranking`}
-            >
-              Ranking
-            </Button>
-            <Text fontSize="xl">User Data</Text>
-            {userList.map((user, index) => (
-              <Button key={index} width="100%" variant="outline" mt="1rem">
-                {user.name}
-              </Button>
-            ))}
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      <HomeDrawer
+        isOpen={isDrawerOpen}
+        onClose={onDrawerClose}
+        leagueId={leagueId}
+        userList={userList}
+        teamList={teamList}
+      />
 
       <HStack justifyContent="space-between" mt="3rem">
         <IconButton
