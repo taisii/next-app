@@ -23,31 +23,36 @@ import { Match, MatchUserResult, Team, User } from '@prisma/client';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
-import { getMatchListByLeagueId } from '../_actions/queries/GetMatchListByLeagueId';
-import { GetTeamAndUserByLeagueId } from '../_actions/queries/GetTeamAndUserByLeagueId';
+import { GetHomeByLeagueId } from '../_actions/queries/GetHomeByLeagueId';
+import { UserWithMatchResultAndTeam } from '../_actions/queries/GetUserListByLeagueId';
 import { HomeDrawer } from '../_components/HomeDrawer';
+import { HomeRanking } from '../_components/HomeRanking';
 import { MatchCard } from '../_components/MatchCard';
 import { UserSelectCard } from '../_components/UserSelectCard';
 
-export type MatchWitchMatchUserResult = Match & { matchUserResultList: MatchUserResult[] };
+export type MatchWithMatchUserResult = Match & { matchUserResultList: MatchUserResult[] };
 
 const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
   const leagueId = Number(params.leagueId);
   const [userList, setUserList] = useState<User[]>([]);
   const [teamList, setTeamList] = useState<Team[]>([]);
+  const [userListWithMatchAndTeam, setUserListWithMatchAndTeam] = useState<UserWithMatchResultAndTeam[]>([]);
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
   const [selectedUserIdList, setSelectedUserIdList] = useState<number[]>([]);
-  const [matchList, setMatchList] = useState<MatchWitchMatchUserResult[]>([]);
+  const [matchList, setMatchList] = useState<MatchWithMatchUserResult[]>([]);
+
   const matchCardObjectList = matchListTomatchCardObjectList(matchList);
+  const { pointRankingList, lastRateRankingList } =
+    userListWithMatchAndTeamToPointRankingObject(userListWithMatchAndTeam);
 
   useEffect(() => {
     const fetchData = async () => {
-      const { userList: ApiResponceUserList, teamList: ApiResponceTeamList } = await GetTeamAndUserByLeagueId(leagueId);
-      const ApiResponceMatchList = await getMatchListByLeagueId(leagueId);
-      setUserList(ApiResponceUserList);
-      setTeamList(ApiResponceTeamList);
-      setMatchList(ApiResponceMatchList);
+      const ApiResponce = await GetHomeByLeagueId(leagueId);
+      setUserList(ApiResponce.userList);
+      setTeamList(ApiResponce.teamList);
+      setMatchList(ApiResponce.matchList);
+      setUserListWithMatchAndTeam(ApiResponce.userListWitchMatchAndTeam);
     };
     fetchData();
   }, [leagueId]);
@@ -81,8 +86,11 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
         </Text>
       </HStack>
       <VStack>
-        <Box width="90%" borderWidth={1} borderColor="gray" height="17rem">
-          ここにグラフを入れる
+        <Box width="90%" mt="2rem">
+          <HomeRanking rankingObjectList={pointRankingList} title="個人スコア" unit="pt" />
+        </Box>
+        <Box width="90%" mt="2rem">
+          <HomeRanking rankingObjectList={lastRateRankingList} title="4着回避率" unit="" isToFixed={true} />
         </Box>
         <IconButton
           aria-label="add-mutch"
@@ -93,6 +101,9 @@ const LeaguePage = ({ params }: { params: { leagueId: string } }) => {
           onClick={onModalOpen}
           zIndex={10}
         />
+        <Text fontWeight="bold" fontSize="1.5rem" mt="2rem">
+          Detail
+        </Text>
         <Box width="95%" mb="3rem">
           {matchCardObjectList.map((matchCardObject, index) => (
             <MatchCard
@@ -133,10 +144,10 @@ export default LeaguePage;
 type MatchCardObject = {
   date: Date;
   userIdList: number[];
-  matchList: MatchWitchMatchUserResult[];
+  matchList: MatchWithMatchUserResult[];
 };
 
-const matchListTomatchCardObjectList = (matchList: MatchWitchMatchUserResult[]) => {
+const matchListTomatchCardObjectList = (matchList: MatchWithMatchUserResult[]) => {
   const groupMap = new Map<string, MatchCardObject>();
 
   for (const match of matchList) {
@@ -167,4 +178,33 @@ const userIdListToUserNameList = (userIdList: number[], userList: User[]) => {
     }
   }
   return userNameList;
+};
+
+const userListWithMatchAndTeamToPointRankingObject = (userListWithMatchAndTeam: UserWithMatchResultAndTeam[]) => {
+  // ランキングコンポーネントに渡すためのデータ整形
+  const pointRankingList: { name: string; iconUriIndex?: number; point: number }[] = [];
+  const lastRateRankingList: { name: string; iconUriIndex?: number; point: number }[] = [];
+  for (const userWithMatchAndTeam of userListWithMatchAndTeam) {
+    let pointSum = 0;
+    let lastCount = 0;
+    let gameCount = 0;
+    for (const { point, rank } of userWithMatchAndTeam.matchUserResultList) {
+      pointSum += point;
+      gameCount++;
+      if (rank === 3) {
+        lastCount++;
+      }
+    }
+    pointRankingList.push({
+      name: userWithMatchAndTeam.name,
+      iconUriIndex: userWithMatchAndTeam.Team?.iconUriIndex,
+      point: pointSum,
+    });
+    lastRateRankingList.push({
+      name: userWithMatchAndTeam.name,
+      iconUriIndex: userWithMatchAndTeam.Team?.iconUriIndex,
+      point: lastCount / gameCount,
+    });
+  }
+  return { pointRankingList, lastRateRankingList };
 };

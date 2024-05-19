@@ -48,7 +48,7 @@ const UserPage = ({ params }: { params: { leagueId: string; userId: string } }) 
       ) : (
         <Avatar icon={<Icon as={AiOutlineUser} boxSize="5rem" color="black" />} size="2xl" bgColor="gray.200" />
       )}
-      <Skeleton isLoaded={!isLoading}>
+      <Skeleton isLoaded={!isLoading} borderRadius="lg">
         <Text fontSize="2rem" fontWeight="bold" textAlign="center">
           {userData?.name ?? 'サンプル名前'}
         </Text>
@@ -56,7 +56,7 @@ const UserPage = ({ params }: { params: { leagueId: string; userId: string } }) 
       <Flex width="90%" mt="3rem">
         <Text>個人スコア</Text>
         <Spacer />
-        <Skeleton isLoaded={!isLoading}>
+        <Skeleton isLoaded={!isLoading} borderRadius="lg">
           <Text>{totalPoint}</Text>
         </Skeleton>
       </Flex>
@@ -64,14 +64,14 @@ const UserPage = ({ params }: { params: { leagueId: string; userId: string } }) 
       <Flex width="90%">
         <Text>平均着順</Text>
         <Spacer />
-        <Skeleton isLoaded={!isLoading}>
+        <Skeleton isLoaded={!isLoading} borderRadius="lg">
           <Text>{averageRank}</Text>
         </Skeleton>
       </Flex>
       <Flex width="90%" mb="3rem">
         <Text>ゲーム数</Text>
         <Spacer />
-        <Skeleton isLoaded={!isLoading}>
+        <Skeleton isLoaded={!isLoading} borderRadius="lg">
           <Text>{gameCount}</Text>
         </Skeleton>
       </Flex>
@@ -81,7 +81,7 @@ const UserPage = ({ params }: { params: { leagueId: string; userId: string } }) 
         <Flex width="90%" key={index}>
           <Text>{index + 1}位率</Text>
           <Spacer />
-          <Skeleton isLoaded={!isLoading}>
+          <Skeleton isLoaded={!isLoading} borderRadius="lg">
             <Text>{rankingProbability}</Text>
           </Skeleton>
         </Flex>

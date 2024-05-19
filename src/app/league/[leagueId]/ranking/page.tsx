@@ -3,10 +3,7 @@
 import { Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import {
-  GetUserListWithMatchResultByLeagueIdResponce,
-  getUserListByLeagueId,
-} from '../../_actions/queries/GetUserListWithMatchResultByLeagueId';
+import { UserWithMatchResultAndTeam, getUserListByLeagueId } from '../../_actions/queries/GetUserListByLeagueId';
 import { RankingDisplay, RankingObject } from '../../_components/RankingDisplay';
 
 const RankingPage = ({ params }: { params: { leagueId: string } }) => {
@@ -33,7 +30,7 @@ const RankingPage = ({ params }: { params: { leagueId: string } }) => {
 
 export default RankingPage;
 
-const apiResponceToRankingObjectList = (apiResponce: GetUserListWithMatchResultByLeagueIdResponce) => {
+const apiResponceToRankingObjectList = (apiResponce: UserWithMatchResultAndTeam[]) => {
   const rankingObjectList: RankingObject[] = [];
   for (const user of apiResponce) {
     const { Team, matchUserResultList, name } = user;
