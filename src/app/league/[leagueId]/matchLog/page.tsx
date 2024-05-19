@@ -38,7 +38,7 @@ const MatchLogPage = ({ params }: { params: { leagueId: string } }) => {
     setIsLoading(true);
     const sortedMatchResultList = [...matchResultList].sort((a, b) => b.point - a.point);
     const createMatchObjectList = sortedMatchResultList.map((matchResult, index) => ({
-      rank: index + 1,
+      rank: index,
       ...matchResult,
     }));
     const match = await createMatch(leagueId, createMatchObjectList);

@@ -1,12 +1,12 @@
 import { Box, Card, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
-import { MatchWitchMatchUserResult } from '../[leagueId]/page';
+import { MatchWithMatchUserResult } from '../[leagueId]/page';
 
 type MatchCardProps = {
   date: Date;
   userNameList: string[];
-  matchList: MatchWitchMatchUserResult[];
+  matchList: MatchWithMatchUserResult[];
 };
 
 export const MatchCard = ({ date, userNameList, matchList }: MatchCardProps) => {
@@ -21,7 +21,9 @@ export const MatchCard = ({ date, userNameList, matchList }: MatchCardProps) => 
           <Thead>
             <Tr>
               {userNameList.map((userName, index) => (
-                <Th key={index}>{userName}</Th>
+                <Th key={index} textAlign="center">
+                  {userName}
+                </Th>
               ))}
             </Tr>
           </Thead>
@@ -29,7 +31,9 @@ export const MatchCard = ({ date, userNameList, matchList }: MatchCardProps) => 
             {matchList.map((match, index) => (
               <Tr key={index}>
                 {match.matchUserResultList.map((matchUserResult, index) => (
-                  <Td key={index}>{matchUserResult.point}</Td>
+                  <Td key={index} textAlign="center">
+                    {matchUserResult.point}
+                  </Td>
                 ))}
               </Tr>
             ))}

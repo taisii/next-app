@@ -73,7 +73,14 @@ export const HomeDrawer = ({ isOpen, onClose, leagueId, userList, teamList }: Ho
             Ranking
           </Button>
           {userList.map((user, index) => (
-            <Button key={index} width="100%" variant="outline" mt="1rem">
+            <Button
+              key={index}
+              width="100%"
+              variant="outline"
+              mt="1rem"
+              as={Link}
+              href={`${leagueId}/userPage/${user.id}`}
+            >
               {user.name}
             </Button>
           ))}
